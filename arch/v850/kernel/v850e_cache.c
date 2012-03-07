@@ -51,7 +51,7 @@ void v850e_cache_enable (u16 bhc, u16 icc, u16 dcc)
 	*r0_ram 	= 0x5640006b;	/* jmp [r11] */
 
 	asm ("mov hilo(1f), r11; jmp [%1]; 1:;"
-	     :: "r" (bhc_val), "r" (R0_RAM_ADDR) : "r11");
+	     : : "r" (bhc_val), "r" (R0_RAM_ADDR) : "r11");
 }
 
 static void clear_icache (void)

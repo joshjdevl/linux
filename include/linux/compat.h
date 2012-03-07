@@ -114,7 +114,7 @@ extern int put_compat_rusage(const struct rusage *, struct compat_rusage __user 
 
 struct compat_siginfo;
 
-extern asmlinkage long compat_sys_waitid(int, compat_pid_t,
+asmlinkage long compat_sys_waitid(int, compat_pid_t,
 		struct compat_siginfo __user *, int,
 		struct compat_rusage __user *);
 

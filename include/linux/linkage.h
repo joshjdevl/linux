@@ -12,6 +12,13 @@
 #ifndef asmlinkage
 #define asmlinkage CPP_ASMLINKAGE
 #endif
+#ifndef extern_asmlinkage
+# ifdef __cplusplus
+#  define extern_asmlinkage asmlinkage
+# else
+#  define extern_asmlinkage extern asmlinkage
+# endif
+#endif
 
 #ifndef prevent_tail_call
 # define prevent_tail_call(ret) do { } while (0)

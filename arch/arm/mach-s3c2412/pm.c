@@ -52,7 +52,7 @@ static void s3c2412_cpu_suspend(void)
 	    ".align 5\n\t"
 	    "1:\n\t"
 	    "mcr p15, 0, %0, c7, c10, 4\n\t"
-	    "mcr p15, 0, %0, c7, c0, 4" :: "r" (tmp));
+	    "mcr p15, 0, %0, c7, c0, 4" : : "r" (tmp));
 
 	/* we should never get past here */
 

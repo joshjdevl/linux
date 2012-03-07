@@ -303,9 +303,7 @@ static inline int tcf_em_tree_match(struct sk_buff *skb,
 
 #else /* CONFIG_NET_EMATCH */
 
-struct tcf_ematch_tree
-{
-};
+EMPTY_STRUCT_DECL(tcf_ematch_tree);
 
 #define tcf_em_tree_validate(tp, tb, t) ((void)(t), 0)
 #define tcf_em_tree_destroy(tp, t) do { (void)(t); } while(0)

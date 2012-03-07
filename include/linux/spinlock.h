@@ -53,6 +53,7 @@
 #include <linux/kernel.h>
 #include <linux/stringify.h>
 #include <linux/bottom_half.h>
+#include <linux/types.h>
 
 #include <asm/system.h>
 

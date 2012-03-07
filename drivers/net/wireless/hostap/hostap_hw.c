@@ -1982,7 +1982,7 @@ static void prism2_rx(local_info_t *local)
 	macport = (status >> 8) & 0x07;
 
 	/* Drop frames with too large reported payload length. Monitor mode
-	 * seems to sometimes pass frames (e.g., ctrl::ack) with signed and
+	 * seems to sometimes pass frames (e.g., ctrl: :ack) with signed and
 	 * negative value, so allow also values 65522 .. 65534 (-14 .. -2) for
 	 * macport 7 */
 	if (len > PRISM2_DATA_MAXLEN + 8 /* WEP */) {
@@ -2396,7 +2396,7 @@ static void prism2_txexc(local_info_t *local)
 
 	fc = le16_to_cpu(txdesc.frame_control);
 	PDEBUG(DEBUG_EXTRA, "   retry_count=%d tx_rate=%d fc=0x%04x "
-	       "(%s%s%s::%d%s%s)\n",
+	       "(%s%s%s: :%d%s%s)\n",
 	       txdesc.retry_count, txdesc.tx_rate, fc,
 	       WLAN_FC_GET_TYPE(fc) == IEEE80211_FTYPE_MGMT ? "Mgmt" : "",
 	       WLAN_FC_GET_TYPE(fc) == IEEE80211_FTYPE_CTL ? "Ctrl" : "",

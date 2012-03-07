@@ -100,7 +100,7 @@ asmlinkage void resume(void);
  * Force strict CPU ordering.
  * Not really required on m68k...
  */
-#define nop()  asm volatile ("nop"::)
+#define nop()  asm volatile ("nop": :)
 #define mb()   asm volatile (""   : : :"memory")
 #define rmb()  asm volatile (""   : : :"memory")
 #define wmb()  asm volatile (""   : : :"memory")
@@ -194,14 +194,14 @@ static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int siz
 #define __HAVE_ARCH_CMPXCHG	1
 
 static __inline__ unsigned long
-cmpxchg(volatile int *p, int old, int new)
+cmpxchg(volatile int *p, int old, int n)
 {
 	unsigned long flags;
 	int prev;
 
 	local_irq_save(flags);
 	if ((prev = *p) == old)
-		*p = new;
+		*p = n;
 	local_irq_restore(flags);
 	return(prev);
 }

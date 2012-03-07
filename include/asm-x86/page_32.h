@@ -76,7 +76,10 @@ static inline pmd_t native_make_pmd(unsigned long long val)
 
 static inline pte_t native_make_pte(unsigned long long val)
 {
-	return (pte_t) { .pte_low = val, .pte_high = (val >> 32) } ;
+	pte_t __pte;
+	__pte.pte_low = val;
+	__pte.pte_high = (val >> 32);
+	return __pte;
 }
 
 #ifndef CONFIG_PARAVIRT
@@ -109,7 +112,9 @@ static inline pgd_t native_make_pgd(unsigned long val)
 
 static inline pte_t native_make_pte(unsigned long val)
 {
-	return (pte_t) { .pte_low = val };
+	pte_t __pte;
+	__pte.pte_low = val;
+	return __pte;
 }
 
 #define HPAGE_SHIFT	22

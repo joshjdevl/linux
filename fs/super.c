@@ -43,6 +43,8 @@
 LIST_HEAD(super_blocks);
 DEFINE_SPINLOCK(sb_lock);
 
+EXPORT_SYMBOL(sb_lock);
+
 /**
  *	alloc_super	-	create new superblock
  *	@type:	filesystem type superblock should belong to

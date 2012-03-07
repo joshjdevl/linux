@@ -441,7 +441,7 @@ static void __init hdpu_set_l1pe()
 	unsigned long ictrl;
 	asm volatile ("mfspr %0, 1011":"=r" (ictrl):);
 	ictrl |= ICTRL_EICE | ICTRL_EDC | ICTRL_EICP;
-	asm volatile ("mtspr 1011, %0"::"r" (ictrl));
+	asm volatile ("mtspr 1011, %0": :"r" (ictrl));
 }
 
 /*
@@ -807,7 +807,7 @@ static void smp_hdpu_kick_cpu(int nr)
 	 */
 	mdelay(100);
 	*(unsigned long *)KERNELBASE = nr;
-	asm volatile ("dcbf 0,%0"::"r" (KERNELBASE):"memory");
+	asm volatile ("dcbf 0,%0": :"r" (KERNELBASE):"memory");
 
 	iounmap(bootaddr);
 

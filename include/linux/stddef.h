@@ -12,10 +12,12 @@
 
 #ifdef __KERNEL__
 
+#ifndef __cplusplus
 enum {
 	false	= 0,
 	true	= 1
 };
+#endif
 
 #undef offsetof
 #ifdef __compiler_offsetof

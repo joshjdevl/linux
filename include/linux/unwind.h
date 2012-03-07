@@ -14,7 +14,7 @@
 
 struct module;
 
-struct unwind_frame_info {};
+EMPTY_STRUCT_DECL(unwind_frame_info);
 
 static inline void unwind_init(void) {}
 static inline void unwind_setup(void) {}

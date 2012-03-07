@@ -130,7 +130,7 @@ static inline void stgi(void)
 
 static inline void invlpga(unsigned long addr, u32 asid)
 {
-	asm volatile (SVM_INVLPGA :: "a"(addr), "c"(asid));
+	asm volatile (SVM_INVLPGA : : "a"(addr), "c"(asid));
 }
 
 static inline unsigned long kvm_read_cr2(void)
@@ -143,7 +143,7 @@ static inline unsigned long kvm_read_cr2(void)
 
 static inline void kvm_write_cr2(unsigned long val)
 {
-	asm volatile ("mov %0, %%cr2" :: "r" (val));
+	asm volatile ("mov %0, %%cr2" : : "r" (val));
 }
 
 static inline unsigned long read_dr6(void)
@@ -156,7 +156,7 @@ static inline unsigned long read_dr6(void)
 
 static inline void write_dr6(unsigned long val)
 {
-	asm volatile ("mov %0, %%dr6" :: "r" (val));
+	asm volatile ("mov %0, %%dr6" : : "r" (val));
 }
 
 static inline unsigned long read_dr7(void)
@@ -169,7 +169,7 @@ static inline unsigned long read_dr7(void)
 
 static inline void write_dr7(unsigned long val)
 {
-	asm volatile ("mov %0, %%dr7" :: "r" (val));
+	asm volatile ("mov %0, %%dr7" : : "r" (val));
 }
 
 static inline void force_new_asid(struct kvm_vcpu *vcpu)

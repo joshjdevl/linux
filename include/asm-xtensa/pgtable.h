@@ -250,7 +250,7 @@ static inline void update_pte(pte_t *ptep, pte_t pteval)
 {
 	*ptep = pteval;
 #if (DCACHE_WAY_SIZE > PAGE_SIZE) && XCHAL_DCACHE_IS_WRITEBACK
-	__asm__ __volatile__ ("dhwb %0, 0" :: "a" (ptep));
+	__asm__ __volatile__ ("dhwb %0, 0" : : "a" (ptep));
 #endif
 
 }

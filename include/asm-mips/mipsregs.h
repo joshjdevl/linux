@@ -1049,15 +1049,15 @@ do {									\
 #define mfhi2() ({ long mfhi2; __asm__("mfhi %0, $ac2" : "=r" (mfhi2)); mfhi2;})
 #define mfhi3() ({ long mfhi3; __asm__("mfhi %0, $ac3" : "=r" (mfhi3)); mfhi3;})
 
-#define mtlo0(x) __asm__("mtlo %0, $ac0" ::"r" (x))
-#define mtlo1(x) __asm__("mtlo %0, $ac1" ::"r" (x))
-#define mtlo2(x) __asm__("mtlo %0, $ac2" ::"r" (x))
-#define mtlo3(x) __asm__("mtlo %0, $ac3" ::"r" (x))
+#define mtlo0(x) __asm__("mtlo %0, $ac0" : :"r" (x))
+#define mtlo1(x) __asm__("mtlo %0, $ac1" : :"r" (x))
+#define mtlo2(x) __asm__("mtlo %0, $ac2" : :"r" (x))
+#define mtlo3(x) __asm__("mtlo %0, $ac3" : :"r" (x))
 
-#define mthi0(x) __asm__("mthi %0, $ac0" ::"r" (x))
-#define mthi1(x) __asm__("mthi %0, $ac1" ::"r" (x))
-#define mthi2(x) __asm__("mthi %0, $ac2" ::"r" (x))
-#define mthi3(x) __asm__("mthi %0, $ac3" ::"r" (x))
+#define mthi0(x) __asm__("mthi %0, $ac0" : :"r" (x))
+#define mthi1(x) __asm__("mthi %0, $ac1" : :"r" (x))
+#define mthi2(x) __asm__("mthi %0, $ac2" : :"r" (x))
+#define mthi3(x) __asm__("mthi %0, $ac3" : :"r" (x))
 
 #else
 
@@ -1387,13 +1387,13 @@ clear_c0_##name(unsigned int clear)				\
 }								\
 								\
 static inline unsigned int					\
-change_c0_##name(unsigned int change, unsigned int new)		\
+change_c0_##name(unsigned int change, unsigned int n)		\
 {								\
 	unsigned int res;					\
 								\
 	res = read_c0_##name();					\
 	res &= ~change;						\
-	res |= (new & change);					\
+	res |= (n & change);					\
 	write_c0_##name(res);					\
 								\
 	return res;						\
@@ -1491,7 +1491,7 @@ clear_c0_##name(unsigned int clear)				\
 }								\
 								\
 static inline unsigned int					\
-change_c0_##name(unsigned int change, unsigned int new)		\
+change_c0_##name(unsigned int change, unsigned int n)		\
 {								\
 	unsigned int res;					\
 	unsigned int omt;					\
@@ -1502,7 +1502,7 @@ change_c0_##name(unsigned int change, unsigned int new)		\
 	omt = __dmt();						\
 	res = read_c0_##name();					\
 	res &= ~change;						\
-	res |= (new & change);					\
+	res |= (n & change);					\
 	write_c0_##name(res);					\
 	__emt(omt);						\
 	local_irq_restore(flags);				\

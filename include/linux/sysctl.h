@@ -955,7 +955,7 @@ typedef int ctl_handler (struct ctl_table *table, int __user *name, int nlen,
 			 void __user *oldval, size_t __user *oldlenp,
 			 void __user *newval, size_t newlen);
 
-typedef int proc_handler (struct ctl_table *ctl, int write, struct file * filp,
+typedef int proc_handler_t (struct ctl_table *ctl, int write, struct file * filp,
 			  void __user *buffer, size_t *lenp, loff_t *ppos);
 
 extern int proc_dostring(struct ctl_table *, int, struct file *,
@@ -1043,7 +1043,7 @@ struct ctl_table
 	mode_t mode;
 	struct ctl_table *child;
 	struct ctl_table *parent;	/* Automatically set */
-	proc_handler *proc_handler;	/* Callback for text formatting */
+	proc_handler_t *proc_handler;	/* Callback for text formatting */
 	ctl_handler *strategy;		/* Callback function for all r/w */
 	void *extra1;
 	void *extra2;

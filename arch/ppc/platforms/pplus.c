@@ -737,7 +737,7 @@ static int __init smp_pplus_probe(void)
 static void __init smp_pplus_kick_cpu(int nr)
 {
 	*(unsigned long *)KERNELBASE = nr;
-	asm volatile ("dcbf 0,%0"::"r" (KERNELBASE):"memory");
+	asm volatile ("dcbf 0,%0": :"r" (KERNELBASE):"memory");
 	printk(KERN_INFO "CPU1 reset, waiting\n");
 }
 

@@ -21,7 +21,7 @@ extern long prctl_set_seccomp(unsigned long);
 
 #else /* CONFIG_SECCOMP */
 
-typedef struct { } seccomp_t;
+typedef EMPTY_STRUCT_DECL(/* unnamed */) seccomp_t;
 
 #define secure_computing(x) do { } while (0)
 

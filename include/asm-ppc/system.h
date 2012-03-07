@@ -187,7 +187,7 @@ extern inline void * xchg_ptr(void * m, void * val)
 #define __HAVE_ARCH_CMPXCHG	1
 
 static __inline__ unsigned long
-__cmpxchg_u32(volatile unsigned int *p, unsigned int old, unsigned int new)
+__cmpxchg_u32(volatile unsigned int *p, unsigned int old, unsigned int n)
 {
 	unsigned int prev;
 
@@ -203,7 +203,7 @@ __cmpxchg_u32(volatile unsigned int *p, unsigned int old, unsigned int new)
 #endif /* CONFIG_SMP */
 "2:"
 	: "=&r" (prev), "=m" (*p)
-	: "r" (p), "r" (old), "r" (new), "m" (*p)
+	: "r" (p), "r" (old), "r" (n), "m" (*p)
 	: "cc", "memory");
 
 	return prev;
@@ -214,14 +214,14 @@ __cmpxchg_u32(volatile unsigned int *p, unsigned int old, unsigned int new)
 extern void __cmpxchg_called_with_bad_pointer(void);
 
 static __inline__ unsigned long
-__cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
+__cmpxchg(volatile void *ptr, unsigned long old, unsigned long n, int size)
 {
 	switch (size) {
 	case 4:
-		return __cmpxchg_u32(ptr, old, new);
+		return __cmpxchg_u32(ptr, old, n);
 #if 0	/* we don't have __cmpxchg_u64 on 32-bit PPC */
 	case 8:
-		return __cmpxchg_u64(ptr, old, new);
+		return __cmpxchg_u64(ptr, old, n);
 #endif /* 0 */
 	}
 	__cmpxchg_called_with_bad_pointer();

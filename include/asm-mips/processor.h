@@ -233,7 +233,7 @@ unsigned long get_wchan(struct task_struct *p);
  * overhead of a function call by forcing the compiler to save the return
  * address register on the stack.
  */
-#define return_address() ({__asm__ __volatile__("":::"$31");__builtin_return_address(0);})
+#define return_address() ({__asm__ __volatile__("": : :"$31");__builtin_return_address(0);})
 
 #ifdef CONFIG_CPU_HAS_PREFETCH
 

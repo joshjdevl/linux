@@ -124,7 +124,7 @@ extern unsigned long irq_flags;
 /*
  * Force strict CPU ordering.
  */
-#define nop()  asm volatile ("nop;\n\t"::)
+#define nop()  asm volatile ("nop;\n\t": :)
 #define mb()   asm volatile (""   : : :"memory")
 #define rmb()  asm volatile (""   : : :"memory")
 #define wmb()  asm volatile (""   : : :"memory")

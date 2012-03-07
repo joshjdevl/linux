@@ -4,6 +4,7 @@
 #include <linux/list.h>
 #include <linux/ktime.h>
 #include <linux/stddef.h>
+#include <linux/hrtimer.h>
 
 struct tvec_t_base_s;
 

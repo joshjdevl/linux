@@ -146,6 +146,16 @@ static inline int ip_route_connect(struct rtable **rp, __be32 dst,
 				   __be16 sport, __be16 dport, struct sock *sk,
 				   int flags)
 {
+#ifdef __cplusplus
+       struct flowi fl;
+       fl.oif = oif;
+       fl.nl_u.ip4_u.daddr = dst;
+       fl.nl_u.ip4_u.saddr = src;
+       fl.nl_u.ip4_u.tos = tos;
+       fl.proto = protocol;
+       fl.uli_u.ports.sport = sport;
+       fl.uli_u.ports.dport = dport;
+#else
 	struct flowi fl = { .oif = oif,
 			    .nl_u = { .ip4_u = { .daddr = dst,
 						 .saddr = src,
@@ -154,7 +164,7 @@ static inline int ip_route_connect(struct rtable **rp, __be32 dst,
 			    .uli_u = { .ports =
 				       { .sport = sport,
 					 .dport = dport } } };
-
+#endif
 	int err;
 	if (!dst || !src) {
 		err = __ip_route_output_key(rp, &fl);

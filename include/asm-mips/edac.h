@@ -14,7 +14,7 @@ static inline void atomic_scrub(void *va, u32 size)
 		 * Very carefully read and write to memory atomically
 		 * so we are interrupt, DMA and SMP safe.
 		 *
-		 * Intel: asm("lock; addl $0, %0"::"m"(*virt_addr));
+		 * Intel: asm("lock; addl $0, %0": :"m"(*virt_addr));
 		 */
 
 		__asm__ __volatile__ (

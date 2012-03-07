@@ -22,15 +22,19 @@ typedef struct {
 
 #else
 
-typedef struct { } raw_spinlock_t;
+typedef EMPTY_STRUCT_DECL(/* unnamed */) raw_spinlock_t;
 
 #define __RAW_SPIN_LOCK_UNLOCKED { }
 
 #endif
 
+#ifdef CONFIG_DEBUG_LOCK_ALLOC
 typedef struct {
 	/* no debug version on UP */
 } raw_rwlock_t;
+#else
+typedef EMPTY_STRUCT_DECL(/* unnamed */) raw_rwlock_t;
+#endif
 
 #define __RAW_RW_LOCK_UNLOCKED { }
 

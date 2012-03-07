@@ -519,7 +519,7 @@ int __kprobes setjmp_pre_handler(struct kprobe *p, struct pt_regs *regs)
 
 void __kprobes jprobe_return(void)
 {
-	asm volatile("trap" ::: "memory");
+	asm volatile("trap" : : : "memory");
 }
 
 void __kprobes jprobe_return_end(void)

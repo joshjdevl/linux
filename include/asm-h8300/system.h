@@ -78,7 +78,7 @@ asmlinkage void resume(void);
  * Force strict CPU ordering.
  * Not really required on H8...
  */
-#define nop()  asm volatile ("nop"::)
+#define nop()  asm volatile ("nop": :)
 #define mb()   asm volatile (""   : : :"memory")
 #define rmb()  asm volatile (""   : : :"memory")
 #define wmb()  asm volatile (""   : : :"memory")

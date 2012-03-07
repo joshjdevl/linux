@@ -108,10 +108,10 @@ static inline void wdebug(int reg, unsigned long data) {
 	asm(	"move.l	%0, %%a0\n\t"
 		".word	0xfbd0\n\t"
 		".word	0x0003\n\t"
-	    :: "g" (dbg) : "a0");
+	    : : "g" (dbg) : "a0");
 #else
 	// And this is for when it does
-	asm(	"wdebug	(%0)" :: "a" (dbg));
+	asm(	"wdebug	(%0)" : : "a" (dbg));
 #endif
 }
 

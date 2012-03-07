@@ -87,14 +87,14 @@ extern void gdbstub_tx_char(unsigned char ch);
 extern void gdbstub_tx_flush(void);
 extern void gdbstub_do_rx(void);
 
-extern asmlinkage void __debug_stub_init_break(void);
-extern asmlinkage void __break_hijack_kernel_event(void);
-extern asmlinkage void __break_hijack_kernel_event_breaks_here(void);
-extern asmlinkage void start_kernel(void);
+asmlinkage void __debug_stub_init_break(void);
+asmlinkage void __break_hijack_kernel_event(void);
+asmlinkage void __break_hijack_kernel_event_breaks_here(void);
+asmlinkage void start_kernel(void);
 
-extern asmlinkage void gdbstub_rx_handler(void);
-extern asmlinkage void gdbstub_rx_irq(void);
-extern asmlinkage void gdbstub_intercept(void);
+asmlinkage void gdbstub_rx_handler(void);
+asmlinkage void gdbstub_rx_irq(void);
+asmlinkage void gdbstub_intercept(void);
 
 extern uint32_t __entry_usertrap_table[];
 extern uint32_t __entry_kerneltrap_table[];

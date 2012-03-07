@@ -77,7 +77,7 @@ static inline int i8042_read_data(void)
 	asm volatile("lis     7,0xff88        \n\
 		      lswi    6,7,0x8         \n\
 		      mr      %0,6"
-	              : "=r" (kbd_data) :: "6", "7");
+	              : "=r" (kbd_data) : : "6", "7");
 
 	__raw_writel(0x00000000, 0xff50000c);
 	eieio();
@@ -99,7 +99,7 @@ static inline int i8042_read_status(void)
 		      ori     7,7,0x8         \n\
 		      lswi    6,7,0x8         \n\
 		      mr      %0,6"
-		      : "=r" (kbd_status) :: "6", "7");
+		      : "=r" (kbd_status) : : "6", "7");
 
 	__raw_writel(0x00000000, 0xff50000c);
 	eieio();

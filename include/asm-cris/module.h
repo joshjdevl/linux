@@ -1,7 +1,7 @@
 #ifndef _ASM_CRIS_MODULE_H
 #define _ASM_CRIS_MODULE_H
 /* cris is simple */
-struct mod_arch_specific { };
+EMPTY_STRUCT_DECL(mod_arch_specific);
 
 #define Elf_Shdr Elf32_Shdr
 #define Elf_Sym Elf32_Sym

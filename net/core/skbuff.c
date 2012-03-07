@@ -508,6 +508,109 @@ static void copy_skb_header(struct sk_buff *new, const struct sk_buff *old)
 	skb_shinfo(new)->gso_type = skb_shinfo(old)->gso_type;
 }
 
+/* Click: clear skb header state */
+static inline void skb_headerinit(struct sk_buff *skb, unsigned long flags)
+{
+	skb->next = NULL;
+	skb->prev = NULL;
+	skb->sk = NULL;
+	skb->tstamp.tv64 = 0;     /* No idea about time */
+	skb->dev = NULL;
+	/*skb->input_dev = NULL;*/
+	skb->dst = NULL;
+	skb->sp = NULL;
+	memset(skb->cb, 0, sizeof(skb->cb));
+	skb->priority = 0;
+	skb->pkt_type = PACKET_HOST;   /* Default type */
+	skb->ip_summed = 0;
+	skb->destructor = NULL;
+
+#ifdef CONFIG_NETFILTER
+# if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
+	skb->nfct_reasm = NULL;
+# endif
+# ifdef CONFIG_BRIDGE_NETFILTER
+	skb->nf_bridge = NULL;
+# endif
+#endif
+#ifdef CONFIG_NET_SCHED
+	skb->tc_index = 0;
+# ifdef CONFIG_NET_CLS_ACT
+	skb->tc_verd = 0;
+# endif
+#endif
+}
+
+/* Click: attempts to recycle a sk_buff. if it can be recycled, return it */
+struct sk_buff *skb_recycle(struct sk_buff *skb)
+{
+	if (atomic_dec_and_test(&skb->users)) {
+		dst_release(skb->dst);
+#ifdef CONFIG_XFRM
+		secpath_put(skb->sp);
+#endif
+		if(skb->destructor) {
+			WARN_ON(in_irq());
+			skb->destructor(skb);
+		}
+#ifdef CONFIG_NETFILTER
+# if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
+		nf_conntrack_put(skb->nfct);
+		nf_conntrack_put_reasm(skb->nfct_reasm);
+# endif
+# ifdef CONFIG_BRIDGE_NETFILTER
+		nf_bridge_put(skb->nf_bridge);
+# endif
+#endif
+		skb_headerinit(skb, 0);
+	
+		if (skb->fclone == SKB_FCLONE_UNAVAILABLE
+		    && (!skb->cloned ||
+			atomic_read(&skb_shinfo(skb)->dataref) == (skb->nohdr ? (1 << SKB_DATAREF_SHIFT) + 1 : 1))) {
+			/* Don't need to atomic_sub skb_shinfo(skb)->dataref,
+			   as we set that to 1 below. */
+			
+			if (skb_shinfo(skb)->nr_frags) {
+				int i;
+				for (i = 0; i < skb_shinfo(skb)->nr_frags; i++)
+					put_page(skb_shinfo(skb)->frags[i].page\
+				    );
+				/* Joonwoo Park patch */
+				skb_shinfo(skb)->nr_frags = 0;
+			}
+			if (skb_shinfo(skb)->frag_list)
+				skb_drop_fraglist(skb);
+			
+			/* Load the data pointers. */
+			skb->data = skb->head;
+			skb_reset_tail_pointer(skb);
+
+			/* end and truesize should have never changed */
+			/* skb->end = skb->data + skb->truesize; */
+			
+			/* set up other state */
+			skb->len = 0;
+			skb->cloned = 0;
+			
+			atomic_set(&skb->users, 1);
+			atomic_set(&(skb_shinfo(skb)->dataref), 1);
+			/* Joonwoo Park patch */
+			skb_shinfo(skb)->gso_size = 0;
+			skb_shinfo(skb)->gso_segs = 0;
+			skb_shinfo(skb)->gso_type = 0;
+			skb_shinfo(skb)->ip6_frag_id = 0;
+
+			return skb;
+	        }
+
+		skb_release_data(skb);
+		kfree_skbmem(skb);
+	}
+	
+	return 0;
+}
+
+
 /**
  *	skb_copy	-	create private copy of an sk_buff
  *	@skb: buffer to copy
@@ -2225,6 +2328,7 @@ EXPORT_SYMBOL(pskb_copy);
 EXPORT_SYMBOL(pskb_expand_head);
 EXPORT_SYMBOL(skb_checksum);
 EXPORT_SYMBOL(skb_clone);
+EXPORT_SYMBOL(skb_recycle);
 EXPORT_SYMBOL(skb_copy);
 EXPORT_SYMBOL(skb_copy_and_csum_bits);
 EXPORT_SYMBOL(skb_copy_and_csum_dev);

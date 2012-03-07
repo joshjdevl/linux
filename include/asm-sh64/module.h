@@ -4,9 +4,7 @@
  * This file contains the SH architecture specific module code.
  */
 
-struct mod_arch_specific {
-	/* empty */
-};
+EMPTY_STRUCT_DECL(mod_arch_specific);
 
 #define Elf_Shdr		Elf32_Shdr
 #define Elf_Sym			Elf32_Sym

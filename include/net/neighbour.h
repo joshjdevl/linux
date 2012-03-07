@@ -237,7 +237,7 @@ extern int			neigh_sysctl_register(struct net_device *dev,
 						      struct neigh_parms *p,
 						      int p_id, int pdev_id,
 						      char *p_name,
-						      proc_handler *proc_handler,
+						      proc_handler_t *proc_handler,
 						      ctl_handler *strategy);
 extern void			neigh_sysctl_unregister(struct neigh_parms *p);
 

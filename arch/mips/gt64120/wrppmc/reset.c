@@ -23,7 +23,7 @@ void wrppmc_machine_restart(char *command)
 	change_c0_config(CONF_CM_CMASK, CONF_CM_UNCACHED);
 	flush_cache_all();
 	write_c0_wired(0);
-	__asm__ __volatile__("jr\t%0"::"r"(0xbfc00000));
+	__asm__ __volatile__("jr\t%0": :"r"(0xbfc00000));
 }
 
 void wrppmc_machine_halt(void)

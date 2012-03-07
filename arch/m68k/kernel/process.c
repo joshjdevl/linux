@@ -301,15 +301,15 @@ int dump_fpu (struct pt_regs *regs, struct user_m68kfp_struct *fpu)
 	}
 
 	/* First dump the fpu context to avoid protocol violation.  */
-	asm volatile ("fsave %0" :: "m" (fpustate[0]) : "memory");
+	asm volatile ("fsave %0" : : "m" (fpustate[0]) : "memory");
 	if (!CPU_IS_060 ? !fpustate[0] : !fpustate[2])
 		return 0;
 
 	asm volatile ("fmovem %/fpiar/%/fpcr/%/fpsr,%0"
-		:: "m" (fpu->fpcntl[0])
+		: : "m" (fpu->fpcntl[0])
 		: "memory");
 	asm volatile ("fmovemx %/fp0-%/fp7,%0"
-		:: "m" (fpu->fpregs[0])
+		: : "m" (fpu->fpregs[0])
 		: "memory");
 	return 1;
 }

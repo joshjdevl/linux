@@ -33,7 +33,7 @@ _F(void, init_irq, (void), { });
 _F(void, restart, (void), { while(1); });
 _F(void, halt, (void), { while(1); });
 _F(void, power_off, (void), { while(1); });
-_F(void, idle, (void), { __asm__ __volatile__ ("waiti 0" ::: "memory"); });
+_F(void, idle, (void), { __asm__ __volatile__ ("waiti 0" : : : "memory"); });
 _F(void, heartbeat, (void), { });
 _F(int,  pcibios_fixup, (void), { return 0; });
 _F(int, get_rtc_time, (time_t* t), { return 0; });

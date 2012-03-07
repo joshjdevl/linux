@@ -39,7 +39,7 @@ static __inline__ unsigned long ffz(unsigned long word)
 
 #define H8300_GEN_BITOP_CONST(OP,BIT)			    \
 	case BIT:					    \
-	__asm__(OP " #" #BIT ",@%0"::"r"(b_addr):"memory"); \
+	__asm__(OP " #" #BIT ",@%0": :"r"(b_addr):"memory"); \
 	break;
 
 #define H8300_GEN_BITOP(FNAME,OP)				      \
@@ -59,7 +59,7 @@ static __inline__ void FNAME(int nr, volatile unsigned long* addr)    \
 			H8300_GEN_BITOP_CONST(OP,7)		      \
 		}						      \
 	} else {						      \
-		__asm__(OP " %w0,@%1"::"r"(nr),"r"(b_addr):"memory"); \
+		__asm__(OP " %w0,@%1": :"r"(nr),"r"(b_addr):"memory"); \
 	}							      \
 }
 

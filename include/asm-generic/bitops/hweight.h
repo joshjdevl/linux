@@ -3,9 +3,15 @@
 
 #include <asm/types.h>
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
 extern unsigned int hweight32(unsigned int w);
 extern unsigned int hweight16(unsigned int w);
 extern unsigned int hweight8(unsigned int w);
 extern unsigned long hweight64(__u64 w);
+#if defined(__cplusplus)
+}
+#endif
 
 #endif /* _ASM_GENERIC_BITOPS_HWEIGHT_H_ */

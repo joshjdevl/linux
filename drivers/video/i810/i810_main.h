@@ -54,7 +54,7 @@ static inline void i810_delete_i2c_busses(struct i810fb_par *par) { }
 #ifdef CONFIG_X86
 static inline void flush_cache(void)
 {
-	asm volatile ("wbinvd":::"memory");
+	asm volatile ("wbinvd": : :"memory");
 }
 #else
 #define flush_cache() do { } while(0)

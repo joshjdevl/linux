@@ -20,6 +20,7 @@
 typedef struct {
 	raw_spinlock_t raw_lock;
 #if defined(CONFIG_PREEMPT) && defined(CONFIG_SMP)
+#error "Click does not support CONFIG_PREEMPT yet"
 	unsigned int break_lock;
 #endif
 #ifdef CONFIG_DEBUG_SPINLOCK
@@ -52,36 +53,36 @@ typedef struct {
 #define SPINLOCK_OWNER_INIT	((void *)-1L)
 
 #ifdef CONFIG_DEBUG_LOCK_ALLOC
-# define SPIN_DEP_MAP_INIT(lockname)	.dep_map = { .name = #lockname }
+# define SPIN_DEP_MAP_INIT(lockname)	dep_map : { name : #lockname }
 #else
 # define SPIN_DEP_MAP_INIT(lockname)
 #endif
 
 #ifdef CONFIG_DEBUG_LOCK_ALLOC
-# define RW_DEP_MAP_INIT(lockname)	.dep_map = { .name = #lockname }
+# define RW_DEP_MAP_INIT(lockname)	dep_map : { name : #lockname }
 #else
 # define RW_DEP_MAP_INIT(lockname)
 #endif
 
 #ifdef CONFIG_DEBUG_SPINLOCK
 # define __SPIN_LOCK_UNLOCKED(lockname)					\
-	(spinlock_t)	{	.raw_lock = __RAW_SPIN_LOCK_UNLOCKED,	\
-				.magic = SPINLOCK_MAGIC,		\
-				.owner = SPINLOCK_OWNER_INIT,		\
-				.owner_cpu = -1,			\
+	(spinlock_t)	{	raw_lock : __RAW_SPIN_LOCK_UNLOCKED,	\
+				magic : SPINLOCK_MAGIC,			\
+				owner : SPINLOCK_OWNER_INIT,		\
+				owner_cpu : -1,				\
 				SPIN_DEP_MAP_INIT(lockname) }
 #define __RW_LOCK_UNLOCKED(lockname)					\
-	(rwlock_t)	{	.raw_lock = __RAW_RW_LOCK_UNLOCKED,	\
-				.magic = RWLOCK_MAGIC,			\
-				.owner = SPINLOCK_OWNER_INIT,		\
-				.owner_cpu = -1,			\
+	(rwlock_t)	{	raw_lock : __RAW_RW_LOCK_UNLOCKED,	\
+				magic : RWLOCK_MAGIC,			\
+				owner : SPINLOCK_OWNER_INIT,		\
+				owner_cpu : -1,				\
 				RW_DEP_MAP_INIT(lockname) }
 #else
 # define __SPIN_LOCK_UNLOCKED(lockname) \
-	(spinlock_t)	{	.raw_lock = __RAW_SPIN_LOCK_UNLOCKED,	\
+	(spinlock_t)	{	raw_lock : __RAW_SPIN_LOCK_UNLOCKED,	\
 				SPIN_DEP_MAP_INIT(lockname) }
 #define __RW_LOCK_UNLOCKED(lockname) \
-	(rwlock_t)	{	.raw_lock = __RAW_RW_LOCK_UNLOCKED,	\
+	(rwlock_t)	{	raw_lock : __RAW_RW_LOCK_UNLOCKED,	\
 				RW_DEP_MAP_INIT(lockname) }
 #endif
 

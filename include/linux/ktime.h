@@ -71,6 +71,12 @@ typedef union ktime ktime_t;		/* Kill this */
 
 #if (BITS_PER_LONG == 64) || defined(CONFIG_KTIME_SCALAR)
 
+#ifdef __cplusplus
+# define KTIME_TV64(__s)({ ktime_t __kt; __kt.tv64 = (__s); __kt; })
+#else
+# define KTIME_TV64(__s)((ktime_t) { .tv64 = (__s) })
+#endif
+
 /**
  * ktime_set - Set a ktime_t variable from a seconds/nanoseconds value
  * @secs:	seconds to set
@@ -82,32 +88,36 @@ static inline ktime_t ktime_set(const long secs, const unsigned long nsecs)
 {
 #if (BITS_PER_LONG == 64)
 	if (unlikely(secs >= KTIME_SEC_MAX))
-		return (ktime_t){ .tv64 = KTIME_MAX };
+	  return KTIME_TV64(KTIME_MAX);
 #endif
-	return (ktime_t) { .tv64 = (s64)secs * NSEC_PER_SEC + (s64)nsecs };
+	return KTIME_TV64((s64)secs * NSEC_PER_SEC + (s64)nsecs);
 }
 
 /* Subtract two ktime_t variables. rem = lhs -rhs: */
 #define ktime_sub(lhs, rhs) \
-		({ (ktime_t){ .tv64 = (lhs).tv64 - (rhs).tv64 }; })
+  KTIME_TV64((lhs).tv64 - (rhs).tv64)
 
 /* Add two ktime_t variables. res = lhs + rhs: */
 #define ktime_add(lhs, rhs) \
-		({ (ktime_t){ .tv64 = (lhs).tv64 + (rhs).tv64 }; })
+  KTIME_TV64((lhs).tv64 + (rhs).tv64)
 
 /*
  * Add a ktime_t variable and a scalar nanosecond value.
  * res = kt + nsval:
  */
 #define ktime_add_ns(kt, nsval) \
-		({ (ktime_t){ .tv64 = (kt).tv64 + (nsval) }; })
+  KTIME_TV64((kt).tv64 + (nsval))
 
 /*
  * Subtract a scalar nanosecod from a ktime_t variable
  * res = kt - nsval:
  */
-#define ktime_sub_ns(kt, nsval) \
-		({ (ktime_t){ .tv64 = (kt).tv64 - (nsval) }; })
+static inline ktime_t ktime_sub_ns(const ktime_t kt, u64 nsval)
+{
+	ktime_t __kt;
+	__kt.tv64 = kt.tv64 - nsval;
+	return __kt;
+}
 
 /* convert a timespec to ktime_t format: */
 static inline ktime_t timespec_to_ktime(struct timespec ts)
@@ -132,6 +142,18 @@ static inline ktime_t timeval_to_ktime(struct timeval tv)
 
 #else
 
+#ifdef __cplusplus
+# define KTIME_TV64(__s)({ ktime_t __kt; __kt.tv64 = (__s); __kt; })
+# define KTIME_SEC_NSEC(__sec, __nsec)({ ktime_t __kt; __kt.tv.sec = (__sec); __kt.tv.nsec = (__nsec); __kt; })
+# define TIMEVAL_SEC_USEC(__sec, __usec) ({ struct timeval __tv; __tv.tv_sec = (__sec); __tv.tv_usec = (__usec); __tv; })
+# define TIMESPEC_SEC_NSEC(__sec, __nsec) ({ struct timespec __ts; __ts.tv_sec = (__sec); __ts.tv_nsec = (__nsec); __ts; })
+#else
+# define KTIME_TV64(__s)((ktime_t) { .tv64 = (__s) })
+# define KTIME_SEC_NSEC(__sec, __nsec)((ktime_t) { .tv = { .sec = (__sec), .nsec = (__nsec) } })
+# define TIMEVAL_SEC_USEC(__sec, __usec) ((struct timeval) { .tv_sec = (__sec), .tv_usec = (__usec) })
+# define TIMESPEC_SEC_NSEC(__sec, __nsec) ((struct timespec) { .tv_sec = (__sec), .tv_nsec = (__nsec) })
+#endif
+
 /*
  * Helper macros/inlines to get the ktime_t math right in the timespec
  * representation. The macros are sometimes ugly - their actual use is
@@ -150,7 +172,7 @@ static inline ktime_t timeval_to_ktime(struct timeval tv)
 /* Set a ktime_t variable to a value in sec/nsec representation: */
 static inline ktime_t ktime_set(const long secs, const unsigned long nsecs)
 {
-	return (ktime_t) { .tv = { .sec = secs, .nsec = nsecs } };
+  return KTIME_SEC_NSEC(secs, nsecs);
 }
 
 /**
@@ -223,8 +245,7 @@ extern ktime_t ktime_sub_ns(const ktime_t kt, u64 nsec);
  */
 static inline ktime_t timespec_to_ktime(const struct timespec ts)
 {
-	return (ktime_t) { .tv = { .sec = (s32)ts.tv_sec,
-			   	   .nsec = (s32)ts.tv_nsec } };
+  return KTIME_SEC_NSEC((s32)ts.tv_sec, (s32)ts.tv_nsec);
 }
 
 /**
@@ -235,8 +256,7 @@ static inline ktime_t timespec_to_ktime(const struct timespec ts)
  */
 static inline ktime_t timeval_to_ktime(const struct timeval tv)
 {
-	return (ktime_t) { .tv = { .sec = (s32)tv.tv_sec,
-				   .nsec = (s32)tv.tv_usec * 1000 } };
+  return KTIME_SEC_NSEC((s32)tv.tv_sec, (s32)tv.tv_usec * 1000);
 }
 
 /**
@@ -247,8 +267,7 @@ static inline ktime_t timeval_to_ktime(const struct timeval tv)
  */
 static inline struct timespec ktime_to_timespec(const ktime_t kt)
 {
-	return (struct timespec) { .tv_sec = (time_t) kt.tv.sec,
-				   .tv_nsec = (long) kt.tv.nsec };
+  return TIMESPEC_SEC_NSEC((time_t) kt.tv.sec, (long) kt.tv.nsec);
 }
 
 /**
@@ -259,9 +278,8 @@ static inline struct timespec ktime_to_timespec(const ktime_t kt)
  */
 static inline struct timeval ktime_to_timeval(const ktime_t kt)
 {
-	return (struct timeval) {
-		.tv_sec = (time_t) kt.tv.sec,
-		.tv_usec = (suseconds_t) (kt.tv.nsec / NSEC_PER_USEC) };
+  return TIMEVAL_SEC_USEC((time_t) kt.tv.sec,
+			  (suseconds_t) (kt.tv.nsec / NSEC_PER_USEC));
 }
 
 /**
@@ -316,7 +334,7 @@ static inline ktime_t ktime_sub_us(const ktime_t kt, const u64 usec)
  * idea of the (in)accuracy of timers. Timer values are rounded up to
  * this resolution values.
  */
-#define KTIME_LOW_RES		(ktime_t){ .tv64 = TICK_NSEC }
+#define KTIME_LOW_RES		KTIME_TV64(TICK_NSEC)
 
 /* Get the monotonic time in timespec format: */
 extern void ktime_get_ts(struct timespec *ts);

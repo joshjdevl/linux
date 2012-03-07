@@ -47,7 +47,7 @@
 
 #define IFORCE_MAX_LENGTH	16
 
-/* iforce::bus */
+/* iforce: :bus */
 #define IFORCE_232	1
 #define IFORCE_USB	2
 
@@ -87,7 +87,7 @@ struct iforce_core_effect {
 /* Buffer for async write */
 #define XMIT_SIZE		256
 #define XMIT_INC(var, n)	(var)+=n; (var)&= XMIT_SIZE -1
-/* iforce::xmit_flags */
+/* iforce: :xmit_flags */
 #define IFORCE_XMIT_RUNNING	0
 #define IFORCE_XMIT_AGAIN	1
 

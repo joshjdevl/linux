@@ -503,8 +503,7 @@ struct ib_uverbs_modify_qp {
 	__u64 driver_data[0];
 };
 
-struct ib_uverbs_modify_qp_resp {
-};
+EMPTY_STRUCT_DECL(ib_uverbs_modify_qp_resp);
 
 struct ib_uverbs_destroy_qp {
 	__u64 response;

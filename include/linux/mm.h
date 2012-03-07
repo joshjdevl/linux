@@ -279,7 +279,7 @@ typedef void compound_page_dtor(struct page *);
 static inline void set_compound_page_dtor(struct page *page,
 						compound_page_dtor *dtor)
 {
-	page[1].lru.next = (void *)dtor;
+	page[1].lru.next = (struct list_head *)dtor;
 }
 
 static inline compound_page_dtor *get_compound_page_dtor(struct page *page)
@@ -296,7 +296,7 @@ static inline int compound_order(struct page *page)
 
 static inline void set_compound_order(struct page *page, unsigned long order)
 {
-	page[1].lru.prev = (void *)order;
+	page[1].lru.prev = (struct list_head *)order;
 }
 
 /*
@@ -443,7 +443,7 @@ static inline void set_compound_order(struct page *page, unsigned long order)
 
 static inline enum zone_type page_zonenum(struct page *page)
 {
-	return (page->flags >> ZONES_PGSHIFT) & ZONES_MASK;
+  return (enum zone_type) ((page->flags >> ZONES_PGSHIFT) & ZONES_MASK);
 }
 
 /*

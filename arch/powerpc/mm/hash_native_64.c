@@ -124,7 +124,7 @@ static inline void native_unlock_hpte(struct hash_pte *hptep)
 {
 	unsigned long *word = &hptep->v;
 
-	asm volatile("lwsync":::"memory");
+	asm volatile("lwsync": : :"memory");
 	clear_bit(HPTE_LOCK_BIT, word);
 }
 
@@ -448,7 +448,7 @@ static void native_hpte_clear(void)
 		}
 	}
 
-	asm volatile("eieio; tlbsync; ptesync":::"memory");
+	asm volatile("eieio; tlbsync; ptesync": : :"memory");
 	spin_unlock(&native_tlbie_lock);
 	local_irq_restore(flags);
 }
@@ -497,7 +497,7 @@ static void native_flush_hash_range(unsigned long number, int local)
 
 	if (cpu_has_feature(CPU_FTR_TLBIEL) &&
 	    mmu_psize_defs[psize].tlbiel && local) {
-		asm volatile("ptesync":::"memory");
+		asm volatile("ptesync": : :"memory");
 		for (i = 0; i < number; i++) {
 			va = batch->vaddr[i];
 			pte = batch->pte[i];
@@ -507,14 +507,14 @@ static void native_flush_hash_range(unsigned long number, int local)
 				__tlbiel(va, psize, ssize);
 			} pte_iterate_hashed_end();
 		}
-		asm volatile("ptesync":::"memory");
+		asm volatile("ptesync": : :"memory");
 	} else {
 		int lock_tlbie = !cpu_has_feature(CPU_FTR_LOCKLESS_TLBIE);
 
 		if (lock_tlbie)
 			spin_lock(&native_tlbie_lock);
 
-		asm volatile("ptesync":::"memory");
+		asm volatile("ptesync": : :"memory");
 		for (i = 0; i < number; i++) {
 			va = batch->vaddr[i];
 			pte = batch->pte[i];
@@ -524,7 +524,7 @@ static void native_flush_hash_range(unsigned long number, int local)
 				__tlbie(va, psize, ssize);
 			} pte_iterate_hashed_end();
 		}
-		asm volatile("eieio; tlbsync; ptesync":::"memory");
+		asm volatile("eieio; tlbsync; ptesync": : :"memory");
 
 		if (lock_tlbie)
 			spin_unlock(&native_tlbie_lock);

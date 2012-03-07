@@ -22,7 +22,7 @@ struct thread_struct;
  * `prev' will never be the same as `next'.
  * The `mb' is to tell GCC not to cache `current' across this call.
  */
-extern asmlinkage
+asmlinkage
 struct task_struct *__switch_to(struct thread_struct *prev_thread,
 				struct thread_struct *next_thread,
 				struct task_struct *prev);
@@ -174,7 +174,7 @@ do {							\
 /*
  * Force strict CPU ordering.
  */
-#define nop()			asm volatile ("nop"::)
+#define nop()			asm volatile ("nop": :)
 #define mb()			asm volatile ("membar" : : :"memory")
 #define rmb()			asm volatile ("membar" : : :"memory")
 #define wmb()			asm volatile ("membar" : : :"memory")

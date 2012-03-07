@@ -137,15 +137,15 @@ static inline unsigned int mmio_config_readl(void __iomem *pos)
 
 static inline void mmio_config_writeb(void __iomem *pos, u8 val)
 {
-	asm volatile("movb %%al,(%1)" :: "a" (val), "r" (pos) : "memory");
+	asm volatile("movb %%al,(%1)" : : "a" (val), "r" (pos) : "memory");
 }
 
 static inline void mmio_config_writew(void __iomem *pos, u16 val)
 {
-	asm volatile("movw %%ax,(%1)" :: "a" (val), "r" (pos) : "memory");
+	asm volatile("movw %%ax,(%1)" : : "a" (val), "r" (pos) : "memory");
 }
 
 static inline void mmio_config_writel(void __iomem *pos, u32 val)
 {
-	asm volatile("movl %%eax,(%1)" :: "a" (val), "r" (pos) : "memory");
+	asm volatile("movl %%eax,(%1)" : : "a" (val), "r" (pos) : "memory");
 }

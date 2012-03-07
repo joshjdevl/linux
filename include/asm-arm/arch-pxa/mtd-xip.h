@@ -32,6 +32,6 @@
  * As above, this should not rely upon standard kernel code.
  */
 
-#define xip_cpu_idle()  asm volatile ("mcr p14, 0, %0, c7, c0, 0" :: "r" (1))
+#define xip_cpu_idle()  asm volatile ("mcr p14, 0, %0, c7, c0, 0" : : "r" (1))
 
 #endif /* __ARCH_PXA_MTD_XIP_H__ */

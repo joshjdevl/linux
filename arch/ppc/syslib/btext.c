@@ -273,7 +273,7 @@ void BTEXT btext_clearscreen(void)
 
 __inline__ void dcbst(const void* addr)
 {
-	__asm__ __volatile__ ("dcbst 0,%0" :: "r" (addr));
+	__asm__ __volatile__ ("dcbst 0,%0" : : "r" (addr));
 }
 
 void BTEXT btext_flushscreen(void)

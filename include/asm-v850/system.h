@@ -40,7 +40,7 @@ extern void *switch_thread (struct thread_struct *last,
 #define local_save_flags(flags) \
   __asm__ __volatile__ ("stsr %1, %0" : "=r" (flags) : "i" (SR_PSW))
 #define local_restore_flags(flags) \
-  __asm__ __volatile__ ("ldsr %0, %1" :: "r" (flags), "i" (SR_PSW))
+  __asm__ __volatile__ ("ldsr %0, %1" : : "r" (flags), "i" (SR_PSW))
 
 /* For spinlocks etc */
 #define	local_irq_save(flags) \
@@ -62,7 +62,7 @@ static inline int irqs_disabled (void)
  * Not really required on v850...
  */
 #define nop()			__asm__ __volatile__ ("nop")
-#define mb()			__asm__ __volatile__ ("" ::: "memory")
+#define mb()			__asm__ __volatile__ ("" : : : "memory")
 #define rmb()			mb ()
 #define wmb()			mb ()
 #define read_barrier_depends()	((void)0)

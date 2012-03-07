@@ -91,7 +91,7 @@ __raw_spin_lock_flags (raw_spinlock_t *lock, unsigned long flags)
 /* Unlock by doing an ordered store and releasing the cacheline with nta */
 static inline void __raw_spin_unlock(raw_spinlock_t *x) {
 	barrier();
-	asm volatile ("st4.rel.nta [%0] = r0\n\t" :: "r"(x));
+	asm volatile ("st4.rel.nta [%0] = r0\n\t" : : "r"(x));
 }
 
 #else /* !ASM_SUPPORTED */
@@ -150,7 +150,7 @@ do {										\
 		"cmpxchg4.acq r2 = [%0], r29, ar.ccv;;\n"			\
 		"cmp4.eq p0,p7 = r0, r2\n"					\
 		"(p7) br.cond.spnt.few 1b;;\n"					\
-		:: "r"(rw) : "ar.ccv", "p7", "r2", "r29", "memory");		\
+		: : "r"(rw) : "ar.ccv", "p7", "r2", "r29", "memory");		\
 } while(0)
 
 #define __raw_write_trylock(rw)							\
@@ -169,7 +169,7 @@ static inline void __raw_write_unlock(raw_rwlock_t *x)
 {
 	u8 *y = (u8 *)x;
 	barrier();
-	asm volatile ("st1.rel.nta [%0] = r0\n\t" :: "r"(y+3) : "memory" );
+	asm volatile ("st1.rel.nta [%0] = r0\n\t" : : "r"(y+3) : "memory" );
 }
 
 #else /* !ASM_SUPPORTED */

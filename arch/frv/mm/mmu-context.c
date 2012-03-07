@@ -118,7 +118,7 @@ void change_mm_context(mm_context_t *old, mm_context_t *ctx, pgd_t *pgd)
 	/* map the PGD into uncached virtual memory */
 	asm volatile("movgs %0,ttbr"   : : "r"(_pgd));
 	asm volatile("movgs %0,dampr3"
-		     :: "r"(_pgd | xAMPRx_L | xAMPRx_M | xAMPRx_SS_16Kb |
+		     : : "r"(_pgd | xAMPRx_L | xAMPRx_M | xAMPRx_SS_16Kb |
 			    xAMPRx_S | xAMPRx_C | xAMPRx_V));
 
 } /* end change_mm_context() */

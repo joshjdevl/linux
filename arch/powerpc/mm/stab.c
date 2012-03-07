@@ -142,7 +142,7 @@ static int __ste_allocate(unsigned long ea, struct mm_struct *mm)
 		__get_cpu_var(stab_cache_ptr) = offset;
 
 		/* Order update */
-		asm volatile("sync":::"memory");
+		asm volatile("sync": : :"memory");
 	}
 
 	return 0;
@@ -196,7 +196,7 @@ void switch_stab(struct task_struct *tsk, struct mm_struct *mm)
 		}
 	}
 
-	asm volatile("sync; slbia; sync":::"memory");
+	asm volatile("sync; slbia; sync": : :"memory");
 
 	__get_cpu_var(stab_cache_ptr) = 0;
 
@@ -265,11 +265,11 @@ void stab_initialize(unsigned long stab)
 	unsigned long vsid = get_kernel_vsid(PAGE_OFFSET, MMU_SEGSIZE_256M);
 	unsigned long stabreal;
 
-	asm volatile("isync; slbia; isync":::"memory");
+	asm volatile("isync; slbia; isync": : :"memory");
 	make_ste(stab, GET_ESID(PAGE_OFFSET), vsid);
 
 	/* Order update */
-	asm volatile("sync":::"memory");
+	asm volatile("sync": : :"memory");
 
 	/* Set ASR */
 	stabreal = get_paca()->stab_real | 0x1ul;

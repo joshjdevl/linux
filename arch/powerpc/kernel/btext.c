@@ -318,12 +318,12 @@ void btext_flushscreen(void)
 	{
 		unsigned int *ptr = base;
 		for(j = width; j > 0; j -= 8) {
-			__asm__ __volatile__ ("dcbst 0,%0" :: "r" (ptr));
+			__asm__ __volatile__ ("dcbst 0,%0" : : "r" (ptr));
 			ptr += 8;
 		}
 		base += (dispDeviceRowBytes >> 2);
 	}
-	__asm__ __volatile__ ("sync" ::: "memory");
+	__asm__ __volatile__ ("sync" : : : "memory");
 }
 
 void btext_flushline(void)
@@ -337,12 +337,12 @@ void btext_flushline(void)
 	{
 		unsigned int *ptr = base;
 		for(j = width; j > 0; j -= 8) {
-			__asm__ __volatile__ ("dcbst 0,%0" :: "r" (ptr));
+			__asm__ __volatile__ ("dcbst 0,%0" : : "r" (ptr));
 			ptr += 8;
 		}
 		base += (dispDeviceRowBytes >> 2);
 	}
-	__asm__ __volatile__ ("sync" ::: "memory");
+	__asm__ __volatile__ ("sync" : : : "memory");
 }
 
 

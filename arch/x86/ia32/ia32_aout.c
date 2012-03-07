@@ -412,7 +412,7 @@ beyond_if:
 	current->mm->start_stack =
 		(unsigned long)create_aout_tables((char __user *)bprm->p, bprm);
 	/* start thread */
-	asm volatile("movl %0,%%fs" :: "r" (0)); \
+	asm volatile("movl %0,%%fs" : : "r" (0)); \
 	asm volatile("movl %0,%%es; movl %0,%%ds": :"r" (__USER32_DS));
 	load_gs_index(0); 
 	(regs)->rip = ex.a_entry;

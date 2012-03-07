@@ -21,5 +21,5 @@ DItype __negdi2 (DItype x)
 		 "setf	c, r6;"
 		 "not	r7, r11;"
 		 "add	r6, r11"
-		 ::: "r6", "r7", "r10", "r11");
+		 : : : "r6", "r7", "r10", "r11");
 }

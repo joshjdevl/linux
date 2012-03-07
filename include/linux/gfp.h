@@ -128,20 +128,20 @@ static inline enum zone_type gfp_zone(gfp_t flags)
 
 #ifdef CONFIG_ZONE_DMA
 	if (flags & __GFP_DMA)
-		return base + ZONE_DMA;
+		return (enum zone_type)(base + ZONE_DMA);
 #endif
 #ifdef CONFIG_ZONE_DMA32
 	if (flags & __GFP_DMA32)
-		return base + ZONE_DMA32;
+		return (enum zone_type)(base + ZONE_DMA32);
 #endif
 	if ((flags & (__GFP_HIGHMEM | __GFP_MOVABLE)) ==
 			(__GFP_HIGHMEM | __GFP_MOVABLE))
-		return base + ZONE_MOVABLE;
+		return (enum zone_type)(base + ZONE_MOVABLE);
 #ifdef CONFIG_HIGHMEM
 	if (flags & __GFP_HIGHMEM)
-		return base + ZONE_HIGHMEM;
+		return (enum zone_type)(base + ZONE_HIGHMEM);
 #endif
-	return base + ZONE_NORMAL;
+	return (enum zone_type)(base + ZONE_NORMAL);
 }
 
 static inline gfp_t set_migrateflags(gfp_t gfp, gfp_t migrate_flags)

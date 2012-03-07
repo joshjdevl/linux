@@ -155,7 +155,7 @@ void __init ibm440gx_l2c_enable(void){
 	}
 
 	local_irq_save(flags);
-	asm volatile ("sync" ::: "memory");
+	asm volatile ("sync" : : : "memory");
 
 	/* Disable SRAM */
 	mtdcr(DCRN_SRAM0_DPC,   mfdcr(DCRN_SRAM0_DPC)   & ~SRAM_DPC_ENABLE);
@@ -187,7 +187,7 @@ void __init ibm440gx_l2c_enable(void){
 	r |= 0x80000000 | L2C_SNP_SSR_32G | L2C_SNP_ESR;
 	mtdcr(DCRN_L2C0_SNP1, r);
 
-	asm volatile ("sync" ::: "memory");
+	asm volatile ("sync" : : : "memory");
 
 	/* Enable ICU/DCU ports */
 	r = mfdcr(DCRN_L2C0_CFG);
@@ -197,7 +197,7 @@ void __init ibm440gx_l2c_enable(void){
 		| L2C_CFG_CPIM | L2C_CFG_TPIM | L2C_CFG_LIM | L2C_CFG_SMCM;
 	mtdcr(DCRN_L2C0_CFG, r);
 
-	asm volatile ("sync; isync" ::: "memory");
+	asm volatile ("sync; isync" : : : "memory");
 	local_irq_restore(flags);
 }
 
@@ -207,7 +207,7 @@ void __init ibm440gx_l2c_disable(void){
 	unsigned long flags;
 
 	local_irq_save(flags);
-	asm volatile ("sync" ::: "memory");
+	asm volatile ("sync" : : : "memory");
 
 	/* Disable L2C mode */
 	r = mfdcr(DCRN_L2C0_CFG) & ~(L2C_CFG_L2M | L2C_CFG_ICU | L2C_CFG_DCU);
@@ -224,7 +224,7 @@ void __init ibm440gx_l2c_disable(void){
 	mtdcr(DCRN_SRAM0_SB3CR,
 	      SRAM_SBCR_BAS3 | SRAM_SBCR_BS_64KB | SRAM_SBCR_BU_RW);
 
-	asm volatile ("sync; isync" ::: "memory");
+	asm volatile ("sync; isync" : : : "memory");
 	local_irq_restore(flags);
 }
 

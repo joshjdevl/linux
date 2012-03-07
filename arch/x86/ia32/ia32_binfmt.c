@@ -203,7 +203,7 @@ do {							\
 
 #undef start_thread
 #define start_thread(regs,new_rip,new_rsp) do { \
-	asm volatile("movl %0,%%fs" :: "r" (0)); \
+	asm volatile("movl %0,%%fs" : : "r" (0)); \
 	asm volatile("movl %0,%%es; movl %0,%%ds": :"r" (__USER32_DS)); \
 	load_gs_index(0); \
 	(regs)->rip = (new_rip); \

@@ -716,6 +716,46 @@ struct net_device
 	/* macvlan */
 	struct macvlan_port	*macvlan_port;
 
+       /* Click polling support */
+       /*
+        * polling is < 0 if the device does not support polling, == 0 if the
+        * device supports polling but interrupts are on, and > 0 if polling
+        * is on.
+        */
+       int                     polling;
+       int                     (*poll_on)(struct net_device *);
+       int                     (*poll_off)(struct net_device *);
+       /*
+        * rx_poll returns to caller a linked list of sk_buff objects received
+        * by the device. on call, the want argument specifies the number of
+        * packets wanted. on return, the want argument specifies the number
+        * of packets actually returned.
+        */
+       struct sk_buff *        (*rx_poll)(struct net_device*, int *want);
+       /* refill rx dma ring using the given sk_buff list. returns 0 if
+        * successful, or if there are more entries need to be cleaned,
+        * returns the number of dirty entries. the ptr to the sk_buff list is
+        * updated by the driver to point to any unused skbs.
+        */
+       int                     (*rx_refill)(struct net_device*, struct sk_buff**);
+       /*
+        * place sk_buff on the transmit ring. returns 0 if successful, 1
+        * otherwise
+        */
+       int                     (*tx_queue)(struct net_device *, struct sk_buff*);
+       /*
+        * clean tx dma ring. returns the list of skb objects cleaned
+        */
+       struct sk_buff*         (*tx_clean)(struct net_device *);
+       /*
+        * start transmission. returns 0 if successful, 1 otherwise
+        */
+       int                     (*tx_start)(struct net_device *);
+       /*
+        * tell device the end of a batch of packets
+        */
+       int                     (*tx_eob)(struct net_device *);
+
 	/* class/net/name entry */
 	struct device		dev;
 	/* space for optional statistics and wireless sysfs groups */
@@ -843,6 +883,9 @@ extern void		free_netdev(struct net_device *dev);
 extern void		synchronize_net(void);
 extern int 		register_netdevice_notifier(struct notifier_block *nb);
 extern int		unregister_netdevice_notifier(struct notifier_block *nb);
+extern int		register_net_in(struct notifier_block *nb); /* Click */
+extern int		unregister_net_in(struct notifier_block *nb); /* Click */
+extern int		ptype_dispatch(struct sk_buff *skb, unsigned short type); /* Click */
 extern int call_netdevice_notifiers(unsigned long val, struct net_device *dev);
 extern struct net_device	*dev_get_by_index(struct net *net, int ifindex);
 extern struct net_device	*__dev_get_by_index(struct net *net, int ifindex);
@@ -1085,7 +1128,8 @@ extern void dev_kfree_skb_any(struct sk_buff *skb);
 extern int		netif_rx(struct sk_buff *skb);
 extern int		netif_rx_ni(struct sk_buff *skb);
 #define HAVE_NETIF_RECEIVE_SKB 1
-extern int		netif_receive_skb(struct sk_buff *skb);
+#define HAVE___NETIF_RECEIVE_SKB 1
+extern int             __netif_receive_skb(struct sk_buff *skb, unsigned short protocol, int ignore_notifiers);
 extern int		dev_valid_name(const char *name);
 extern int		dev_ioctl(struct net *net, unsigned int cmd, void __user *);
 extern int		dev_ethtool(struct net *net, struct ifreq *);
@@ -1223,6 +1267,11 @@ static inline int netif_device_present(struct net_device *dev)
 extern void netif_device_detach(struct net_device *dev);
 
 extern void netif_device_attach(struct net_device *dev);
+
+static inline int netif_receive_skb(struct sk_buff *skb)
+{
+       return __netif_receive_skb(skb, skb->protocol, 0);
+}
 
 /*
  * Network interface message level settings

@@ -338,8 +338,7 @@ typedef struct reiserfs_proc_info_data {
 	} journal;
 } reiserfs_proc_info_data_t;
 #else
-typedef struct reiserfs_proc_info_data {
-} reiserfs_proc_info_data_t;
+typedef EMPTY_STRUCT_DECL(reiserfs_proc_info_data) reiserfs_proc_info_data_t;
 #endif
 
 /* reiserfs union of in-core super block data */

@@ -238,6 +238,9 @@ static void unlist_netdevice(struct net_device *dev)
 	write_unlock_bh(&dev_base_lock);
 }
 
+/* Click: input packet handlers, might steal packets from net_rx_action. */
+static RAW_NOTIFIER_HEAD(net_in_chain);
+
 /*
  *	Our notifier list
  */
@@ -1882,6 +1885,29 @@ static inline int deliver_skb(struct sk_buff *skb,
 	return pt_prev->func(skb, skb->dev, pt_prev, orig_dev);
 }
 
+/*
+ * Click: Allow Click to ask to intercept input packets.
+ */
+int
+register_net_in(struct notifier_block *nb)
+{
+       int err;
+       rtnl_lock();
+       err = raw_notifier_chain_register(&net_in_chain, nb);
+       rtnl_unlock();
+       return err;
+}
+
+int
+unregister_net_in(struct notifier_block *nb)
+{
+       int err;
+       rtnl_lock();
+       err = raw_notifier_chain_unregister(&net_in_chain, nb);
+       rtnl_unlock();
+       return err;
+}
+
 #if defined(CONFIG_BRIDGE) || defined (CONFIG_BRIDGE_MODULE)
 /* These hooks defined here for ATM */
 struct net_bridge;
@@ -2015,12 +2041,11 @@ out:
  *	NET_RX_SUCCESS: no congestion
  *	NET_RX_DROP: packet was dropped
  */
-int netif_receive_skb(struct sk_buff *skb)
+int __netif_receive_skb(struct sk_buff *skb, unsigned short type, int notifier_data)
 {
 	struct packet_type *ptype, *pt_prev;
 	struct net_device *orig_dev;
 	int ret = NET_RX_DROP;
-	__be16 type;
 
 	/* if we've gotten here through NAPI, check netpoll */
 	if (netpoll_receive_skb(skb))
@@ -2042,6 +2067,14 @@ int netif_receive_skb(struct sk_buff *skb)
 	skb_reset_network_header(skb);
 	skb_reset_transport_header(skb);
 	skb->mac_len = skb->network_header - skb->mac_header;
+
+       /* Click: may want to steal the packet */
+       if (notifier_data >= 0
+           && raw_notifier_call_chain(&net_in_chain,
+                                  notifier_data,
+                                  skb) & NOTIFY_STOP_MASK) {
+               return ret;
+       }
 
 	pt_prev = NULL;
 
@@ -2076,7 +2109,6 @@ ncls:
 	if (!skb)
 		goto out;
 
-	type = skb->protocol;
 	list_for_each_entry_rcu(ptype, &ptype_base[ntohs(type)&15], list) {
 		if (ptype->type == type &&
 		    (!ptype->dev || ptype->dev == skb->dev)) {
@@ -2124,7 +2156,7 @@ static int process_backlog(struct napi_struct *napi, int quota)
 
 		dev = skb->dev;
 
-		netif_receive_skb(skb);
+		__netif_receive_skb(skb, skb->protocol, skb_queue_len(&queue->input_pkt_queue));
 
 		dev_put(dev);
 	} while (++work < quota && jiffies == start_time);
@@ -4469,6 +4501,7 @@ EXPORT_SYMBOL(dev_get_by_flags);
 EXPORT_SYMBOL(dev_get_by_index);
 EXPORT_SYMBOL(dev_get_by_name);
 EXPORT_SYMBOL(dev_open);
+EXPORT_SYMBOL(dev_ioctl);
 EXPORT_SYMBOL(dev_queue_xmit);
 EXPORT_SYMBOL(dev_remove_pack);
 EXPORT_SYMBOL(dev_set_allmulti);
@@ -4481,10 +4514,16 @@ EXPORT_SYMBOL(netdev_boot_setup_check);
 EXPORT_SYMBOL(netdev_set_master);
 EXPORT_SYMBOL(netdev_state_change);
 EXPORT_SYMBOL(netif_receive_skb);
+EXPORT_SYMBOL(__netif_receive_skb);
 EXPORT_SYMBOL(netif_rx);
 EXPORT_SYMBOL(register_gifconf);
 EXPORT_SYMBOL(register_netdevice);
 EXPORT_SYMBOL(register_netdevice_notifier);
+
+/* Click */
+EXPORT_SYMBOL(register_net_in);
+EXPORT_SYMBOL(unregister_net_in);
+
 EXPORT_SYMBOL(skb_checksum_help);
 EXPORT_SYMBOL(synchronize_net);
 EXPORT_SYMBOL(unregister_netdevice);

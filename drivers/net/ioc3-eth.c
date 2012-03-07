@@ -158,7 +158,7 @@ static inline unsigned long ioc3_map(void *ptr, unsigned long vdev)
 
 /* DMA barrier to separate cached and uncached accesses.  */
 #define BARRIER()							\
-	__asm__("sync" ::: "memory")
+	__asm__("sync" : : : "memory")
 
 
 #define IOC3_SIZE 0x100000

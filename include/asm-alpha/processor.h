@@ -31,8 +31,8 @@ typedef struct {
 } mm_segment_t;
 
 /* This is dead.  Everything has been moved to thread_info.  */
-struct thread_struct { };
-#define INIT_THREAD  { }
+EMPTY_STRUCT_DECL(thread_struct);
+#define INIT_THREAD  EMPTY_STRUCT_INIT(thread_struct)
 
 /* Return saved PC of a blocked thread.  */
 struct task_struct;

@@ -186,6 +186,12 @@ enum {
 	SKB_GSO_TCPV6 = 1 << 4,
 };
 
+/* Click: overload sk_buff.pkt_type to contain information about whether
+   a packet is clean. Clean packets have the following fields zero:
+   dst, destructor, pkt_bridged, prev, list, sk, security, priority. */
+#define PACKET_CLEAN           128             /* Is packet clean? */
+#define PACKET_TYPE_MASK       127             /* Actual packet type */
+
 #if BITS_PER_LONG > 32
 #define NET_SKBUFF_DATA_USES_OFFSET 1
 #endif
@@ -363,6 +369,7 @@ extern struct sk_buff *skb_copy(const struct sk_buff *skb,
 				gfp_t priority);
 extern struct sk_buff *pskb_copy(struct sk_buff *skb,
 				 gfp_t gfp_mask);
+extern struct sk_buff *skb_recycle(struct sk_buff *skb);
 extern int	       pskb_expand_head(struct sk_buff *skb,
 					int nhead, int ntail,
 					gfp_t gfp_mask);
@@ -1422,7 +1429,7 @@ static inline int skb_padto(struct sk_buff *skb, unsigned int len)
 }
 
 static inline int skb_add_data(struct sk_buff *skb,
-			       char __user *from, int copy)
+			       unsigned char __user *from, int copy)
 {
 	const int off = skb->len;
 
@@ -1498,7 +1505,8 @@ static inline void skb_postpull_rcsum(struct sk_buff *skb,
 				      const void *start, unsigned int len)
 {
 	if (skb->ip_summed == CHECKSUM_COMPLETE)
-		skb->csum = csum_sub(skb->csum, csum_partial(start, len, 0));
+	  skb->csum = csum_sub(skb->csum, csum_partial((const unsigned char *) start, len, 0));
+
 }
 
 unsigned char *skb_pull_rcsum(struct sk_buff *skb, unsigned int len);

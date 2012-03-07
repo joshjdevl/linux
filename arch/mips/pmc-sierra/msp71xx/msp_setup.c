@@ -123,7 +123,7 @@ void msp_restart(char *command)
 	flush_cache_all();
 	write_c0_wired(0);
 
-	__asm__ __volatile__("jr\t%0"::"r"(0xbfc00000));
+	__asm__ __volatile__("jr\t%0": :"r"(0xbfc00000));
 #endif
 }
 

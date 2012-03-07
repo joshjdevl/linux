@@ -2259,7 +2259,7 @@ static inline int security_netlink_recv (struct sk_buff *skb, int cap)
 static inline struct dentry *securityfs_create_dir(const char *name,
 					struct dentry *parent)
 {
-	return ERR_PTR(-ENODEV);
+  return (struct dentry *) ERR_PTR(-ENODEV);
 }
 
 static inline struct dentry *securityfs_create_file(const char *name,
@@ -2268,7 +2268,7 @@ static inline struct dentry *securityfs_create_file(const char *name,
 						void *data,
 						struct file_operations *fops)
 {
-	return ERR_PTR(-ENODEV);
+  return (struct dentry *) ERR_PTR(-ENODEV);
 }
 
 static inline void securityfs_remove(struct dentry *dentry)

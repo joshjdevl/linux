@@ -148,7 +148,7 @@ static void raid6_sse12_gen_syndrome(int disks, size_t bytes, void **ptrs)
 		asm volatile("movntq %%mm6,%0" : "=m" (q[d+8]));
 	}
 
-	asm volatile("sfence" : :: "memory");
+	asm volatile("sfence" : : : "memory");
 	kernel_fpu_end();
 }
 

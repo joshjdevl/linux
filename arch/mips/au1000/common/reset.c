@@ -158,7 +158,7 @@ void au1000_restart(char *command)
 	board_reset();
 
 	/* Jump to the beggining in case board_reset() is empty */
-	__asm__ __volatile__("jr\t%0"::"r"(0xbfc00000));
+	__asm__ __volatile__("jr\t%0": :"r"(0xbfc00000));
 }
 
 void au1000_halt(void)

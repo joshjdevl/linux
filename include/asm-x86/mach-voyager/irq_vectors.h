@@ -66,14 +66,14 @@
 #define invalid_vm86_irq(irq)	((irq) < 3 || (irq) > 15)
 
 #ifndef __ASSEMBLY__
-extern asmlinkage void vic_cpi_interrupt(void);
-extern asmlinkage void vic_sys_interrupt(void);
-extern asmlinkage void vic_cmn_interrupt(void);
-extern asmlinkage void qic_timer_interrupt(void);
-extern asmlinkage void qic_invalidate_interrupt(void);
-extern asmlinkage void qic_reschedule_interrupt(void);
-extern asmlinkage void qic_enable_irq_interrupt(void);
-extern asmlinkage void qic_call_function_interrupt(void);
+asmlinkage void vic_cpi_interrupt(void);
+asmlinkage void vic_sys_interrupt(void);
+asmlinkage void vic_cmn_interrupt(void);
+asmlinkage void qic_timer_interrupt(void);
+asmlinkage void qic_invalidate_interrupt(void);
+asmlinkage void qic_reschedule_interrupt(void);
+asmlinkage void qic_enable_irq_interrupt(void);
+asmlinkage void qic_call_function_interrupt(void);
 #endif /* !__ASSEMBLY__ */
 
 #endif /* _ASM_IRQ_VECTORS_H */

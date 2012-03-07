@@ -49,7 +49,7 @@
 static inline void v850e_intc_enable_irq (unsigned irq)
 {
 	__asm__ __volatile__ ("clr1 %0, [%1]"
-			      :: "r" (V850E_INTC_IMR_BIT (irq)),
+			      : : "r" (V850E_INTC_IMR_BIT (irq)),
 			         "r" (V850E_INTC_IMR_ADDR (irq))
 			      : "memory");
 }
@@ -61,7 +61,7 @@ static inline void v850e_intc_enable_irq (unsigned irq)
 static inline void v850e_intc_disable_irq (unsigned irq)
 {
 	__asm__ __volatile__ ("set1 %0, [%1]"
-			      :: "r" (V850E_INTC_IMR_BIT (irq)),
+			      : : "r" (V850E_INTC_IMR_BIT (irq)),
 			         "r" (V850E_INTC_IMR_ADDR (irq))
 			      : "memory");
 }
@@ -93,7 +93,7 @@ static inline void _v850e_intc_disable_irqs (unsigned limit)
 static inline void v850e_intc_clear_pending_irq (unsigned irq)
 {
 	__asm__ __volatile__ ("clr1 %0, 0[%1]"
-			      :: "i" (V850E_INTC_IC_IF_BIT),
+			      : : "i" (V850E_INTC_IC_IF_BIT),
 			         "r" (V850E_INTC_IC_ADDR (irq))
 			      : "memory");
 }

@@ -455,7 +455,7 @@ __BUILDIO(q, u64)
 static inline void writes##bwlq(volatile void __iomem *mem,		\
 				const void *addr, unsigned int count)	\
 {									\
-	const volatile type *__addr = addr;				\
+  const volatile type *__addr = (const type *) addr;			\
 									\
 	while (count--) {						\
 		__mem_write##bwlq(*__addr, mem);			\
@@ -466,7 +466,7 @@ static inline void writes##bwlq(volatile void __iomem *mem,		\
 static inline void reads##bwlq(volatile void __iomem *mem, void *addr,	\
 			       unsigned int count)			\
 {									\
-	volatile type *__addr = addr;					\
+  volatile type *__addr = (const type *) addr;				\
 									\
 	while (count--) {						\
 		*__addr = __mem_read##bwlq(mem);			\
@@ -479,7 +479,7 @@ static inline void reads##bwlq(volatile void __iomem *mem, void *addr,	\
 static inline void outs##bwlq(unsigned long port, const void *addr,	\
 			      unsigned int count)			\
 {									\
-	const volatile type *__addr = addr;				\
+  const volatile type *__addr = (const type *) addr;			\
 									\
 	while (count--) {						\
 		__mem_out##bwlq(*__addr, port);				\
@@ -490,7 +490,7 @@ static inline void outs##bwlq(unsigned long port, const void *addr,	\
 static inline void ins##bwlq(unsigned long port, void *addr,		\
 			     unsigned int count)			\
 {									\
-	volatile type *__addr = addr;					\
+  volatile type *__addr = (const type *) addr;				\
 									\
 	while (count--) {						\
 		*__addr = __mem_in##bwlq(port);				\
@@ -512,7 +512,7 @@ BUILDSTRING(q, u64)
 
 
 /* Depends on MIPS II instruction set */
-#define mmiowb() asm volatile ("sync" ::: "memory")
+#define mmiowb() asm volatile ("sync" : : : "memory")
 
 static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
 {

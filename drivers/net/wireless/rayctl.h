@@ -418,9 +418,7 @@ struct status {
 };
 
 /****** Host-to-ECF Data Area at Shared RAM offset 0x200 *********************/
-struct host_to_ecf_area {
-    
-};
+EMPTY_STRUCT_DECL(host_to_ecf_area);
 
 /****** ECF-to-Host Data Area at Shared RAM offset 0x0300 ********************/
 struct startup_res_518 {

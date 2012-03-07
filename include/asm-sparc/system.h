@@ -170,9 +170,9 @@ extern void fpsave(unsigned long *fpregs, unsigned long *fsr,
 #define wmb()	mb()
 #define read_barrier_depends()	do { } while(0)
 #define set_mb(__var, __value)  do { __var = __value; mb(); } while(0)
-#define smp_mb()	__asm__ __volatile__("":::"memory")
-#define smp_rmb()	__asm__ __volatile__("":::"memory")
-#define smp_wmb()	__asm__ __volatile__("":::"memory")
+#define smp_mb()	__asm__ __volatile__("": : :"memory")
+#define smp_rmb()	__asm__ __volatile__("": : :"memory")
+#define smp_wmb()	__asm__ __volatile__("": : :"memory")
 #define smp_read_barrier_depends()	do { } while(0)
 
 #define nop() __asm__ __volatile__ ("nop")

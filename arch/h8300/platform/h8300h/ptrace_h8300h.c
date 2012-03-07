@@ -191,7 +191,7 @@ static int isbranch(struct task_struct *task,int reson)
 		"bld #2,%w0\n\t"
 		"bor #0,%w0\n\t"
 		"bst #6,%w0\n\t"
-		:"=&r"(cond)::"cc");
+		:"=&r"(cond): :"cc");
 	cond &= condmask[reson >> 1];
 	if (!(reson & 1))
 		return cond == 0;

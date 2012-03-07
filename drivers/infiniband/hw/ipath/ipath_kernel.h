@@ -962,7 +962,7 @@ dma_addr_t ipath_map_single(struct pci_dev *, void *, size_t, int);
  * barrier.
  */
 #if defined(CONFIG_X86_64)
-#define ipath_flush_wc() asm volatile("sfence" ::: "memory")
+#define ipath_flush_wc() asm volatile("sfence" : : : "memory")
 #else
 #define ipath_flush_wc() wmb()
 #endif

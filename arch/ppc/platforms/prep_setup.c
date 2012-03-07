@@ -1027,7 +1027,7 @@ static void __init
 smp_prep_kick_cpu(int nr)
 {
 	*(unsigned long *)KERNELBASE = nr;
-	asm volatile("dcbf 0,%0"::"r"(KERNELBASE):"memory");
+	asm volatile("dcbf 0,%0": :"r"(KERNELBASE):"memory");
 	printk("CPU1 released, waiting\n");
 }
 

@@ -167,7 +167,7 @@ int do_migrate_pages(struct mm_struct *mm,
 
 #else
 
-struct mempolicy {};
+EMPTY_STRUCT_DECL(shared_policy);
 
 static inline int mpol_equal(struct mempolicy *a, struct mempolicy *b)
 {
@@ -189,8 +189,6 @@ static inline struct mempolicy *mpol_copy(struct mempolicy *old)
 {
 	return NULL;
 }
-
-struct shared_policy {};
 
 static inline int mpol_set_shared_policy(struct shared_policy *info,
 					struct vm_area_struct *vma,

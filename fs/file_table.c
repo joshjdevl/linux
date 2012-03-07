@@ -30,6 +30,7 @@ struct files_stat_struct files_stat = {
 
 /* public. Not pretty! */
 __cacheline_aligned_in_smp DEFINE_SPINLOCK(files_lock);
+EXPORT_SYMBOL(files_lock);
 
 static struct percpu_counter nr_files __cacheline_aligned_in_smp;
 

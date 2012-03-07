@@ -429,7 +429,7 @@ int wake_bit_function(wait_queue_t *wait, unsigned mode, int sync, void *key);
 static inline int wait_on_bit(void *word, int bit,
 				int (*action)(void *), unsigned mode)
 {
-	if (!test_bit(bit, word))
+  if (!test_bit(bit, (volatile unsigned long *) word))
 		return 0;
 	return out_of_line_wait_on_bit(word, bit, action, mode);
 }
@@ -453,7 +453,7 @@ static inline int wait_on_bit(void *word, int bit,
 static inline int wait_on_bit_lock(void *word, int bit,
 				int (*action)(void *), unsigned mode)
 {
-	if (!test_and_set_bit(bit, word))
+  if (!test_and_set_bit(bit, (volatile unsigned long *) word))
 		return 0;
 	return out_of_line_wait_on_bit_lock(word, bit, action, mode);
 }

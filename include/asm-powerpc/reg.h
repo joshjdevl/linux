@@ -745,8 +745,8 @@
 			asm volatile("mftbu %0" : "=r" (rval)); rval;})
 #endif /* !__powerpc64__ */
 
-#define mttbl(v)	asm volatile("mttbl %0":: "r"(v))
-#define mttbu(v)	asm volatile("mttbu %0":: "r"(v))
+#define mttbl(v)	asm volatile("mttbl %0": : "r"(v))
+#define mttbu(v)	asm volatile("mttbu %0": : "r"(v))
 
 #ifdef CONFIG_PPC32
 #define mfsrin(v)	({unsigned int rval; \

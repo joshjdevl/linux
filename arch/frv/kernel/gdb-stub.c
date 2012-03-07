@@ -1331,26 +1331,26 @@ void gdbstub_get_mmu_state(void)
 		p = __debug_mmu.tlb;
 
 		/* way 0 */
-		asm volatile("movgs %0,tpxr" :: "r"(0 << TPXR_WAY_SHIFT));
+		asm volatile("movgs %0,tpxr" : : "r"(0 << TPXR_WAY_SHIFT));
 		for (loop = 0; loop < 64; loop++) {
-			asm volatile("tlbpr %0,gr0,#1,#0" :: "r"(loop << PAGE_SHIFT));
+			asm volatile("tlbpr %0,gr0,#1,#0" : : "r"(loop << PAGE_SHIFT));
 			asm volatile("movsg tplr,%0" : "=r"(p->L));
 			asm volatile("movsg tppr,%0" : "=r"(p->P));
 			p++;
 		}
 
 		/* way 1 */
-		asm volatile("movgs %0,tpxr" :: "r"(1 << TPXR_WAY_SHIFT));
+		asm volatile("movgs %0,tpxr" : : "r"(1 << TPXR_WAY_SHIFT));
 		for (loop = 0; loop < 64; loop++) {
-			asm volatile("tlbpr %0,gr0,#1,#0" :: "r"(loop << PAGE_SHIFT));
+			asm volatile("tlbpr %0,gr0,#1,#0" : : "r"(loop << PAGE_SHIFT));
 			asm volatile("movsg tplr,%0" : "=r"(p->L));
 			asm volatile("movsg tppr,%0" : "=r"(p->P));
 			p++;
 		}
 
-		asm volatile("movgs %0,tplr" :: "r"(__debug_mmu.regs.tplr));
-		asm volatile("movgs %0,tppr" :: "r"(__debug_mmu.regs.tppr));
-		asm volatile("movgs %0,tpxr" :: "r"(__debug_mmu.regs.tpxr));
+		asm volatile("movgs %0,tplr" : : "r"(__debug_mmu.regs.tplr));
+		asm volatile("movgs %0,tppr" : : "r"(__debug_mmu.regs.tppr));
+		asm volatile("movgs %0,tpxr" : : "r"(__debug_mmu.regs.tpxr));
 	} while(0);
 #endif
 
@@ -1421,7 +1421,7 @@ void gdbstub(int sigval)
 	if (temp3 == temp + TBR_TT_DECREMENT_TIMER ||
 	    temp3 == temp2 + TBR_TT_DECREMENT_TIMER
 	    ) {
-		asm volatile("movgs %0,timerd" :: "r"(10000000));
+		asm volatile("movgs %0,timerd" : : "r"(10000000));
 		asm volatile("movsg pcsr,%0" : "=r"(__debug_frame->pc));
 		__debug_frame->psr |= PSR_ET;
 		__debug_frame->psr &= ~PSR_S;
@@ -1696,13 +1696,13 @@ void gdbstub(int sigval)
 				ptr = hex2mem(ptr, &temp, 4);
 
 			ptr = hex2mem(ptr, &temp, 4);
-			asm volatile("movgs %0,scr0" :: "r"(temp));
+			asm volatile("movgs %0,scr0" : : "r"(temp));
 			ptr = hex2mem(ptr, &temp, 4);
-			asm volatile("movgs %0,scr1" :: "r"(temp));
+			asm volatile("movgs %0,scr1" : : "r"(temp));
 			ptr = hex2mem(ptr, &temp, 4);
-			asm volatile("movgs %0,scr2" :: "r"(temp));
+			asm volatile("movgs %0,scr2" : : "r"(temp));
 			ptr = hex2mem(ptr, &temp, 4);
-			asm volatile("movgs %0,scr3" :: "r"(temp));
+			asm volatile("movgs %0,scr3" : : "r"(temp));
 
 			ptr = hex2mem(ptr, &__debug_frame->lr,  4);
 			ptr = hex2mem(ptr, &__debug_frame->lcr, 4);

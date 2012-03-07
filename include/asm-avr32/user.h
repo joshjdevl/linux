@@ -38,9 +38,8 @@
  *	to write an integer number of pages.
  */
 
-struct user_fpu_struct {
-	/* We have no FPU (yet) */
-};
+EMPTY_STRUCT_DECL(user_fpu_struct);
+/* We have no FPU (yet) */
 
 struct user {
 	struct pt_regs	regs;			/* entire machine state */

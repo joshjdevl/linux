@@ -282,8 +282,7 @@ union TPchipPERRMASK {
 /*
  * Data structure for handling TSUNAMI machine checks:
  */
-struct el_TSUNAMI_sysdata_mcheck {
-};
+EMPTY_STRUCT_DECL(el_TSUNAMI_sysdata_mcheck);
 
 
 #ifdef __KERNEL__

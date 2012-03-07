@@ -54,9 +54,9 @@ static inline void prefetch_range(void *addr, size_t len)
 {
 #ifdef ARCH_HAS_PREFETCH
 	char *cp;
-	char *end = addr + len;
+	char *end = (char*)(addr) + len;
 
-	for (cp = addr; cp < end; cp += PREFETCH_STRIDE)
+	for (cp = (char*)(addr); cp < end; cp += PREFETCH_STRIDE)
 		prefetch(cp);
 #endif
 }

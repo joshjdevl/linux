@@ -41,7 +41,7 @@
 #define MAX_PCI_DEVICES   32
 #define MAX_PCI_FUNCTIONS  8
 
-#define iob()  __asm__ __volatile__("eieio; sync":::"memory")
+#define iob()  __asm__ __volatile__("eieio; sync": : :"memory")
 
 struct epci_private {
 	dma_addr_t	dummy_page_da;

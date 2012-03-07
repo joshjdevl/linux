@@ -32,7 +32,7 @@
 	"sst.w r13, 8[ep]; sst.w r14, 12[ep];"	\
 	"sst.w r15, 16[ep]; sst.w r17, 20[ep];"	\
 	"sst.w r18, 24[ep]; sst.w r19, 28[ep]"	\
-	:: "r" (src), "r" (dst)			\
+	: : "r" (src), "r" (dst)			\
 	: "r1", "r12", "r13", "r14", "r15",	\
 	  "r17", "r18", "r19", "ep", "memory");
 

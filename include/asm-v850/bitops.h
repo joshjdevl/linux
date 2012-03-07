@@ -48,13 +48,13 @@
 
 #define __const_bit_op(op, nr, addr)					\
   ({ __asm__ (op " (%0 - 0x123), %1"					\
-	      :: "g" (((nr) & 0x7) + 0x123),				\
+	      : : "g" (((nr) & 0x7) + 0x123),				\
 		 "m" (*((char *)(addr) + ((nr) >> 3)))			\
 	      : "memory"); })
 #define __var_bit_op(op, nr, addr)					\
   ({ int __nr = (nr);							\
      __asm__ (op " %0, [%1]"						\
-	      :: "r" (__nr & 0x7),					\
+	      : : "r" (__nr & 0x7),					\
 		 "r" ((char *)(addr) + (__nr >> 3))			\
 	      : "memory"); })
 #define __bit_op(op, nr, addr)						\

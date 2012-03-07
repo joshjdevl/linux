@@ -30,7 +30,9 @@ typedef __kernel_clockid_t	clockid_t;
 typedef __kernel_mqd_t		mqd_t;
 
 #ifdef __KERNEL__
+#ifndef __cplusplus
 typedef _Bool			bool;
+#endif
 
 typedef __kernel_uid32_t	uid_t;
 typedef __kernel_gid32_t	gid_t;
@@ -205,5 +207,13 @@ struct ustat {
 	char			f_fname[6];
 	char			f_fpack[6];
 };
+
+/*
+ * Click: Macros for defining empty structures. Needed because GCC's C and C++
+ * compilers have different ABIs for empty structures.
+ */
+
+#define EMPTY_STRUCT_DECL(s) struct s { int gcc_is_buggy; }
+#define EMPTY_STRUCT_INIT(s) (s) { 0 }
 
 #endif /* _LINUX_TYPES_H */

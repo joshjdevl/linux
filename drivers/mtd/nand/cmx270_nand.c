@@ -40,7 +40,7 @@
 #define DRAIN_WB() \
 	do { \
 		unsigned char dummy; \
-		asm volatile ("mcr p15, 0, r0, c7, c10, 4":::"r0"); \
+		asm volatile ("mcr p15, 0, r0, c7, c10, 4": : :"r0"); \
 		dummy=*((unsigned char*)UNCACHED_ADDR); \
 	} while(0)
 

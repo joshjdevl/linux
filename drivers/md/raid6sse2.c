@@ -178,7 +178,7 @@ static void raid6_sse24_gen_syndrome(int disks, size_t bytes, void **ptrs)
 
 	kernel_fpu_begin();
 
-	asm volatile("movdqa %0,%%xmm0" :: "m" (raid6_sse_constants.x1d[0]));
+	asm volatile("movdqa %0,%%xmm0" : : "m" (raid6_sse_constants.x1d[0]));
 	asm volatile("pxor %xmm2,%xmm2");	/* P[0] */
 	asm volatile("pxor %xmm3,%xmm3");	/* P[1] */
 	asm volatile("pxor %xmm4,%xmm4"); 	/* Q[0] */
@@ -195,8 +195,8 @@ static void raid6_sse24_gen_syndrome(int disks, size_t bytes, void **ptrs)
 	for ( d = 0 ; d < bytes ; d += 64 ) {
 		for ( z = z0 ; z >= 0 ; z-- ) {
 			/* The second prefetch seems to improve performance... */
-			asm volatile("prefetchnta %0" :: "m" (dptr[z][d]));
-			asm volatile("prefetchnta %0" :: "m" (dptr[z][d+32]));
+			asm volatile("prefetchnta %0" : : "m" (dptr[z][d]));
+			asm volatile("prefetchnta %0" : : "m" (dptr[z][d+32]));
 			asm volatile("pcmpgtb %xmm4,%xmm5");
 			asm volatile("pcmpgtb %xmm6,%xmm7");
 			asm volatile("pcmpgtb %xmm12,%xmm13");
@@ -213,10 +213,10 @@ static void raid6_sse24_gen_syndrome(int disks, size_t bytes, void **ptrs)
 			asm volatile("pxor %xmm7,%xmm6");
 			asm volatile("pxor %xmm13,%xmm12");
 			asm volatile("pxor %xmm15,%xmm14");
-			asm volatile("movdqa %0,%%xmm5" :: "m" (dptr[z][d]));
-			asm volatile("movdqa %0,%%xmm7" :: "m" (dptr[z][d+16]));
-			asm volatile("movdqa %0,%%xmm13" :: "m" (dptr[z][d+32]));
-			asm volatile("movdqa %0,%%xmm15" :: "m" (dptr[z][d+48]));
+			asm volatile("movdqa %0,%%xmm5" : : "m" (dptr[z][d]));
+			asm volatile("movdqa %0,%%xmm7" : : "m" (dptr[z][d+16]));
+			asm volatile("movdqa %0,%%xmm13" : : "m" (dptr[z][d+32]));
+			asm volatile("movdqa %0,%%xmm15" : : "m" (dptr[z][d+48]));
 			asm volatile("pxor %xmm5,%xmm2");
 			asm volatile("pxor %xmm7,%xmm3");
 			asm volatile("pxor %xmm13,%xmm10");

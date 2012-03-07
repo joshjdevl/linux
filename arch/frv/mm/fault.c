@@ -243,7 +243,7 @@ asmlinkage void do_page_fault(int datammu, unsigned long esr0, unsigned long ear
 		pte = (pte_t *) damlr + __pte_index(ear0);
 		val = pte_val(*pte);
 
-		asm volatile("movgs %0,dampr2" :: "r" (dampr));
+		asm volatile("movgs %0,dampr2" : : "r" (dampr));
 
 		printk(KERN_ALERT "  PTE : %8p { %08lx }\n", pte, val);
 	}

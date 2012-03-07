@@ -308,11 +308,9 @@ struct mace_perif {
  */
 
 /* Parallel port */
-struct mace_parallel {
-};
+EMPTY_STRUCT_DECL(mace_parallel);
 
-struct mace_ecp1284 {	/* later... */
-};
+EMPTY_STRUCT_DECL(mace_ecp1284);/* later... */
 
 /* Serial port */
 struct mace_serial {

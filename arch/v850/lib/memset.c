@@ -42,7 +42,7 @@ void *memset (void *dst, int val, __kernel_size_t count)
 			     "sst.w %0, 8[ep]; sst.w %0, 12[ep];"
 			     "sst.w %0, 16[ep]; sst.w %0, 20[ep];"
 			     "sst.w %0, 24[ep]; sst.w %0, 28[ep]"
-			     :: "r" (val) : "memory");
+			     : : "r" (val) : "memory");
 			ptr += 32;
 		}
 		count %= 32;

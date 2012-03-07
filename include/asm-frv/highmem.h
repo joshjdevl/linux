@@ -82,11 +82,11 @@ extern struct page *kmap_atomic_to_page(void *ptr);
 	dampr = paddr | xAMPRx_L | xAMPRx_M | xAMPRx_S | xAMPRx_SS_16Kb | xAMPRx_V;		\
 												\
 	if (type != __KM_CACHE)									\
-		asm volatile("movgs %0,dampr"#ampr :: "r"(dampr) : "memory");			\
+		asm volatile("movgs %0,dampr"#ampr : : "r"(dampr) : "memory");			\
 	else											\
 		asm volatile("movgs %0,iampr"#ampr"\n"						\
 			     "movgs %0,dampr"#ampr"\n"						\
-			     :: "r"(dampr) : "memory"						\
+			     : : "r"(dampr) : "memory"						\
 			     );									\
 												\
 	asm("movsg damlr"#ampr",%0" : "=r"(damlr));						\
@@ -140,9 +140,9 @@ static inline void *kmap_atomic(struct page *page, enum km_type type)
 
 #define __kunmap_atomic_primary(type, ampr)				\
 do {									\
-	asm volatile("movgs gr0,dampr"#ampr"\n" ::: "memory");		\
+	asm volatile("movgs gr0,dampr"#ampr"\n" : : : "memory");		\
 	if (type == __KM_CACHE)						\
-		asm volatile("movgs gr0,iampr"#ampr"\n" ::: "memory");	\
+		asm volatile("movgs gr0,iampr"#ampr"\n" : : : "memory");	\
 } while(0)
 
 #define __kunmap_atomic_secondary(slot, vaddr)				\

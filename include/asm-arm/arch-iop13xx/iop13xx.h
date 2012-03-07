@@ -28,7 +28,7 @@ static inline u32 read_wdtcr(void)
 }
 static inline void write_wdtcr(u32 val)
 {
-	asm volatile("mcr p6, 0, %0, c7, c9, 0"::"r" (val));
+	asm volatile("mcr p6, 0, %0, c7, c9, 0": :"r" (val));
 }
 
 /* WDTSR CP6 R8 Page 9 */
@@ -40,7 +40,7 @@ static inline u32 read_wdtsr(void)
 }
 static inline void write_wdtsr(u32 val)
 {
-	asm volatile("mcr p6, 0, %0, c8, c9, 0"::"r" (val));
+	asm volatile("mcr p6, 0, %0, c8, c9, 0": :"r" (val));
 }
 
 /* RCSR - Reset Cause Status Register  */

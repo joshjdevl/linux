@@ -289,7 +289,7 @@ static inline u32 read_wdtcr(void)
 }
 static inline void write_wdtcr(u32 val)
 {
-	asm volatile("mcr p6, 0, %0, c7, c1, 0"::"r" (val));
+	asm volatile("mcr p6, 0, %0, c7, c1, 0": :"r" (val));
 }
 
 extern unsigned long get_iop_tick_rate(void);

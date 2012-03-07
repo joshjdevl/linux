@@ -34,7 +34,7 @@ void highres_timer_slow_tick_irq (void)
 	     "st.w	sp, %0[r0];"
 	     "ld.w	%1[r0], sp;" /* restore pre-irq stack-pointer */
 	     "reti"
-	     ::
+	     : :
 	      "i" (HIGHRES_TIMER_SLOW_TICKS_ADDR),
 	      "i" (ENTRY_SP_ADDR)
 	     : "memory");

@@ -17,7 +17,7 @@
 /*
  * Tell the user there is some problem.
  */
-extern asmlinkage void __debug_bug_trap(int signr);
+asmlinkage void __debug_bug_trap(int signr);
 
 #ifdef CONFIG_NO_KERNEL_MSG
 #define	_debug_bug_printk()

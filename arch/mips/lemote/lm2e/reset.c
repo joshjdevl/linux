@@ -20,7 +20,7 @@ static void loongson2e_restart(char *command)
 	*(unsigned long *)0xffffffffbfe00104 &= ~(1 << 2);
 	*(unsigned long *)0xffffffffbfe00104 |= (1 << 2);
 #endif
-	__asm__ __volatile__("jr\t%0"::"r"(0xbfc00000));
+	__asm__ __volatile__("jr\t%0": :"r"(0xbfc00000));
 }
 
 static void loongson2e_halt(void)

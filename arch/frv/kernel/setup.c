@@ -843,7 +843,7 @@ void __init setup_arch(char **cmdline_p)
 #endif
 
 	/* start the decrement timer running */
-//	asm volatile("movgs %0,timerd" :: "r"(10000000));
+//	asm volatile("movgs %0,timerd" : : "r"(10000000));
 //	__set_HSR(0, __get_HSR(0) | HSR0_ETMD);
 
 } /* end setup_arch() */

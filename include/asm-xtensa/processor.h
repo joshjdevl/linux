@@ -190,7 +190,7 @@ extern unsigned long get_wchan(struct task_struct *p);
 
 /* Special register access. */
 
-#define WSR(v,sr) __asm__ __volatile__ ("wsr %0,"__stringify(sr) :: "a"(v));
+#define WSR(v,sr) __asm__ __volatile__ ("wsr %0,"__stringify(sr) : : "a"(v));
 #define RSR(v,sr) __asm__ __volatile__ ("rsr %0,"__stringify(sr) : "=a"(v));
 
 #define set_sr(x,sr) ({unsigned int v=(unsigned int)x; WSR(v,sr);})

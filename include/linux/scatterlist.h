@@ -290,7 +290,7 @@ static inline dma_addr_t sg_phys(struct scatterlist *sg)
  **/
 static inline void *sg_virt(struct scatterlist *sg)
 {
-	return page_address(sg_page(sg)) + sg->offset;
+	return (void*)((unsigned char*)page_address(sg_page(sg)) + sg->offset);
 }
 
 #endif /* _LINUX_SCATTERLIST_H */

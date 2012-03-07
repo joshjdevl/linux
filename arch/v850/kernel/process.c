@@ -38,7 +38,7 @@ extern void ret_from_fork (void);
 static void default_idle (void)
 {
 	while (! need_resched ())
-		asm ("halt; nop; nop; nop; nop; nop" ::: "cc");
+		asm ("halt; nop; nop; nop; nop; nop" : : : "cc");
 }
 
 void (*idle)(void) = default_idle;

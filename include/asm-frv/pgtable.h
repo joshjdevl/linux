@@ -176,7 +176,7 @@ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
 #define set_pte(pteptr, pteval)				\
 do {							\
 	*(pteptr) = (pteval);				\
-	asm volatile("dcf %M0" :: "U"(*pteptr));	\
+	asm volatile("dcf %M0" : : "U"(*pteptr));	\
 } while(0)
 #define set_pte_at(mm,addr,ptep,pteval) set_pte(ptep,pteval)
 
@@ -210,7 +210,7 @@ static inline void pgd_clear(pgd_t *pgd)	{ }
 #define set_pgd(pgdptr, pgdval)				\
 do {							\
 	memcpy((pgdptr), &(pgdval), sizeof(pgd_t));	\
-	asm volatile("dcf %M0" :: "U"(*(pgdptr)));	\
+	asm volatile("dcf %M0" : : "U"(*(pgdptr)));	\
 } while(0)
 
 static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
@@ -391,21 +391,21 @@ static inline pte_t pte_mkwrite(pte_t pte)	{ (pte).pte &= ~_PAGE_WP; return pte;
 static inline int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
 {
 	int i = test_and_clear_bit(_PAGE_BIT_ACCESSED, ptep);
-	asm volatile("dcf %M0" :: "U"(*ptep));
+	asm volatile("dcf %M0" : : "U"(*ptep));
 	return i;
 }
 
 static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
 {
 	unsigned long x = xchg(&ptep->pte, 0);
-	asm volatile("dcf %M0" :: "U"(*ptep));
+	asm volatile("dcf %M0" : : "U"(*ptep));
 	return __pte(x);
 }
 
 static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
 {
 	set_bit(_PAGE_BIT_WP, ptep);
-	asm volatile("dcf %M0" :: "U"(*ptep));
+	asm volatile("dcf %M0" : : "U"(*ptep));
 }
 
 /*

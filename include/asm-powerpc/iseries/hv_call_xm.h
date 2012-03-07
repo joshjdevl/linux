@@ -50,7 +50,7 @@ static inline u64 HvCallXm_connectBusUnit(u16 busNumber, u8 subBusNumber,
 {
 	return HvCall5(HvCallXmConnectBusUnit, busNumber,
 			(subBusNumber << 8) | deviceId, interruptToken, 0,
-			0 /* HvLpConfig::mapDsaToQueueIndex(HvLpDSA(busNumber, xBoard, xCard)) */);
+			0 /* HvLpConfig: :mapDsaToQueueIndex(HvLpDSA(busNumber, xBoard, xCard)) */);
 }
 
 static inline u64 HvCallXm_loadTod(void)

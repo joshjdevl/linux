@@ -1125,13 +1125,13 @@ static inline int skb_copy_to_page(struct sock *sk, char __user *from,
 {
 	if (skb->ip_summed == CHECKSUM_NONE) {
 		int err = 0;
-		__wsum csum = csum_and_copy_from_user(from,
-						     page_address(page) + off,
+		__wsum csum = csum_and_copy_from_user((unsigned char *)from,
+						      (unsigned char *)page_address(page) + off,
 							    copy, 0, &err);
 		if (err)
 			return err;
 		skb->csum = csum_block_add(skb->csum, csum, skb->len);
-	} else if (copy_from_user(page_address(page) + off, from, copy))
+	} else if (copy_from_user((char*)page_address(page) + off, from, copy))
 		return -EFAULT;
 
 	skb->len	     += copy;
@@ -1394,9 +1394,9 @@ extern int net_msg_warn;
 static inline void sock_valbool_flag(struct sock *sk, int bit, int valbool)
 {
 	if (valbool)
-		sock_set_flag(sk, bit);
+	  sock_set_flag(sk, (enum sock_flags)bit);
 	else
-		sock_reset_flag(sk, bit);
+	  sock_reset_flag(sk, (enum sock_flags)bit);
 }
 
 extern __u32 sysctl_wmem_max;

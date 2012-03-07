@@ -487,8 +487,8 @@ int ia32_setup_frame(int sig, struct k_sigaction *ka,
 	regs->rdx = 0;
 	regs->rcx = 0;
 
-	asm volatile("movl %0,%%ds" :: "r" (__USER32_DS)); 
-	asm volatile("movl %0,%%es" :: "r" (__USER32_DS)); 
+	asm volatile("movl %0,%%ds" : : "r" (__USER32_DS)); 
+	asm volatile("movl %0,%%es" : : "r" (__USER32_DS)); 
 
 	regs->cs = __USER32_CS; 
 	regs->ss = __USER32_DS; 
@@ -593,8 +593,8 @@ int ia32_setup_rt_frame(int sig, struct k_sigaction *ka, siginfo_t *info,
 	regs->rdx = (unsigned long) &frame->info;
 	regs->rcx = (unsigned long) &frame->uc;
 
-	asm volatile("movl %0,%%ds" :: "r" (__USER32_DS)); 
-	asm volatile("movl %0,%%es" :: "r" (__USER32_DS)); 
+	asm volatile("movl %0,%%ds" : : "r" (__USER32_DS)); 
+	asm volatile("movl %0,%%es" : : "r" (__USER32_DS)); 
 	
 	regs->cs = __USER32_CS; 
 	regs->ss = __USER32_DS; 

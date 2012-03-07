@@ -38,7 +38,7 @@ static u32 read_imipr_0(void)
 }
 static void write_imipr_0(u32 val)
 {
-	asm volatile("mcr p6, 0, %0, c8, c1, 0"::"r" (val));
+	asm volatile("mcr p6, 0, %0, c8, c1, 0": :"r" (val));
 }
 
 /* IMIPR1 CP6 R9 Page 1
@@ -51,7 +51,7 @@ static u32 read_imipr_1(void)
 }
 static void write_imipr_1(u32 val)
 {
-	asm volatile("mcr p6, 0, %0, c9, c1, 0"::"r" (val));
+	asm volatile("mcr p6, 0, %0, c9, c1, 0": :"r" (val));
 }
 
 /* IMIPR2 CP6 R10 Page 1
@@ -64,7 +64,7 @@ static u32 read_imipr_2(void)
 }
 static void write_imipr_2(u32 val)
 {
-	asm volatile("mcr p6, 0, %0, c10, c1, 0"::"r" (val));
+	asm volatile("mcr p6, 0, %0, c10, c1, 0": :"r" (val));
 }
 
 /* IMIPR3 CP6 R11 Page 1
@@ -77,7 +77,7 @@ static u32 read_imipr_3(void)
 }
 static void write_imipr_3(u32 val)
 {
-	asm volatile("mcr p6, 0, %0, c11, c1, 0"::"r" (val));
+	asm volatile("mcr p6, 0, %0, c11, c1, 0": :"r" (val));
 }
 
 static u32 (*read_imipr[])(void) = {

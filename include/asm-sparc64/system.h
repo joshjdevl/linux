@@ -86,9 +86,9 @@ do {	__asm__ __volatile__("ba,pt	%%xcc, 1f\n\t" \
 #define smp_wmb()	wmb()
 #define smp_read_barrier_depends()	read_barrier_depends()
 #else
-#define smp_mb()	__asm__ __volatile__("":::"memory")
-#define smp_rmb()	__asm__ __volatile__("":::"memory")
-#define smp_wmb()	__asm__ __volatile__("":::"memory")
+#define smp_mb()	__asm__ __volatile__("": : :"memory")
+#define smp_rmb()	__asm__ __volatile__("": : :"memory")
+#define smp_wmb()	__asm__ __volatile__("": : :"memory")
 #define smp_read_barrier_depends()	do { } while(0)
 #endif
 

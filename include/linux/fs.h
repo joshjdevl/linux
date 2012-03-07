@@ -2013,7 +2013,7 @@ int simple_transaction_release(struct inode *inode, struct file *file);
 
 static inline void simple_transaction_set(struct file *file, size_t n)
 {
-	struct simple_transaction_argresp *ar = file->private_data;
+  struct simple_transaction_argresp *ar = (struct simple_transaction_argresp *)file->private_data;
 
 	BUG_ON(n > SIMPLE_TRANSACTION_LIMIT);
 

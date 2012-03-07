@@ -27,7 +27,7 @@
  * switch_to(n) should switch tasks to task nr n, first
  * checking that n isn't the current task, in which case it does nothing.
  */
-extern asmlinkage void *resume(void *last, void *next, void *next_ti);
+asmlinkage void *resume(void *last, void *next, void *next_ti);
 
 struct task_struct;
 
@@ -189,9 +189,9 @@ static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int siz
 {
 	switch (size) {
 	case 4:
-		return __xchg_u32(ptr, x);
+	  return __xchg_u32((volatile int *)ptr, x);
 	case 8:
-		return __xchg_u64(ptr, x);
+	  return __xchg_u64((volatile __u64 *)ptr, x);
 	}
 	__xchg_called_with_bad_pointer();
 	return x;

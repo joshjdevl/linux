@@ -278,7 +278,7 @@ static void parse_hid_report_descriptor(struct gtco *device, char * report,
 				else if (data == 3)
 					strcpy(globtype, "Var|Const");
 
-				dbg("::::: Saving Report: %d input #%d Max: 0x%X(%d) Min:0x%X(%d) of %d bits",
+				dbg(": : : : : Saving Report: %d input #%d Max: 0x%X(%d) Min:0x%X(%d) of %d bits",
 				    globalval[TAG_GLOB_REPORT_ID], inputnum,
 				    globalval[TAG_GLOB_LOG_MAX], globalval[TAG_GLOB_LOG_MAX],
 				    globalval[TAG_GLOB_LOG_MIN], globalval[TAG_GLOB_LOG_MIN],

@@ -84,7 +84,7 @@ struct pt_regs {
 #define instruction_pointer(regs) ((regs)->cp0_epc)
 #define profile_pc(regs) instruction_pointer(regs)
 
-extern asmlinkage void do_syscall_trace(struct pt_regs *regs, int entryexit);
+asmlinkage void do_syscall_trace(struct pt_regs *regs, int entryexit);
 
 extern NORET_TYPE void die(const char *, const struct pt_regs *) ATTRIB_NORET;
 

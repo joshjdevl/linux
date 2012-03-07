@@ -106,12 +106,12 @@ struct kimage {
 extern NORET_TYPE void machine_kexec(struct kimage *image) ATTRIB_NORET;
 extern int machine_kexec_prepare(struct kimage *image);
 extern void machine_kexec_cleanup(struct kimage *image);
-extern asmlinkage long sys_kexec_load(unsigned long entry,
+asmlinkage long sys_kexec_load(unsigned long entry,
 					unsigned long nr_segments,
 					struct kexec_segment __user *segments,
 					unsigned long flags);
 #ifdef CONFIG_COMPAT
-extern asmlinkage long compat_sys_kexec_load(unsigned long entry,
+asmlinkage long compat_sys_kexec_load(unsigned long entry,
 				unsigned long nr_segments,
 				struct compat_kexec_segment __user *segments,
 				unsigned long flags);

@@ -2638,7 +2638,7 @@ static struct neigh_sysctl_table {
 
 int neigh_sysctl_register(struct net_device *dev, struct neigh_parms *p,
 			  int p_id, int pdev_id, char *p_name,
-			  proc_handler *handler, ctl_handler *strategy)
+			  proc_handler_t *handler, ctl_handler *strategy)
 {
 	struct neigh_sysctl_table *t = kmemdup(&neigh_sysctl_template,
 					       sizeof(*t), GFP_KERNEL);

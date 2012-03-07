@@ -281,7 +281,7 @@ static inline struct proc_dir_entry *PDE(const struct inode *inode)
 
 static inline struct net *PDE_NET(struct proc_dir_entry *pde)
 {
-	return pde->parent->data;
+	return (struct net *)(pde->parent->data);
 }
 
 struct net *get_proc_net(const struct inode *inode);

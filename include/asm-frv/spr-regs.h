@@ -329,7 +329,7 @@ do {								\
 
 #define restore_dampr(R, _dampr)			\
 do {							\
-	asm volatile("movgs %0,dampr"R :: "r"(_dampr));	\
+	asm volatile("movgs %0,dampr"R : : "r"(_dampr));	\
 } while(0)
 
 /*

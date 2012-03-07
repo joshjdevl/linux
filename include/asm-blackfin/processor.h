@@ -21,7 +21,7 @@ static inline unsigned long rdusp(void)
 
 static inline void wrusp(unsigned long usp)
 {
-	__asm__ __volatile__("usp = %0;\n\t"::"da"(usp));
+	__asm__ __volatile__("usp = %0;\n\t": :"da"(usp));
 }
 
 /*

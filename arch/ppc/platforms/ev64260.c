@@ -493,7 +493,7 @@ ev64260_reset_board(void *addr)
 	 "li      4,(1<<6)\n\t"
 	 "mtspr   27,4\n\t"
 	 "rfi\n\t"
-	 :: "r" (addr):"r4");
+	 : : "r" (addr):"r4");
 
 	return;
 }

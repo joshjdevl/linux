@@ -70,8 +70,8 @@ smp_generic_take_timebase( void )
 		if( cmd == kSetAndTest ) {
 			while( tbsync->handshake )
 				;
-			asm volatile ("mttbl %0" :: "r" (tbl) );
-			asm volatile ("mttbu %0" :: "r" (tbu) );
+			asm volatile ("mttbl %0" : : "r" (tbl) );
+			asm volatile ("mttbu %0" : : "r" (tbu) );
 		} else {
 			while( tbsync->handshake )
 				;

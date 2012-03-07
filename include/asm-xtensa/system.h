@@ -21,21 +21,21 @@
 	__asm__ __volatile__ ("rsr %0,"__stringify(PS) : "=a" (x));
 #define local_irq_restore(x)	do {					\
 	__asm__ __volatile__ ("wsr %0, "__stringify(PS)" ; rsync" 	\
-	    		      :: "a" (x) : "memory"); } while(0);
+	    		      : : "a" (x) : "memory"); } while(0);
 #define local_irq_save(x)	do {					\
 	__asm__ __volatile__ ("rsil %0, "__stringify(LOCKLEVEL) 	\
-	    		      : "=a" (x) :: "memory");} while(0);
+	    		      : "=a" (x) : : "memory");} while(0);
 
 static inline void local_irq_disable(void)
 {
 	unsigned long flags;
 	__asm__ __volatile__ ("rsil %0, "__stringify(LOCKLEVEL)
-	    		      : "=a" (flags) :: "memory");
+	    		      : "=a" (flags) : : "memory");
 }
 static inline void local_irq_enable(void)
 {
 	unsigned long flags;
-	__asm__ __volatile__ ("rsil %0, 0" : "=a" (flags) :: "memory");
+	__asm__ __volatile__ ("rsil %0, 0" : "=a" (flags) : : "memory");
 
 }
 
@@ -51,7 +51,7 @@ static inline int irqs_disabled(void)
 	} while(0);
 #define WSR_CPENABLE(x)	do {						  \
   	__asm__ __volatile__("wsr %0," __stringify(CPENABLE)";rsync" 	  \
-	    		     :: "a" (x));} while(0);
+	    		     : : "a" (x));} while(0);
 
 #define clear_cpenable() __clear_cpenable()
 
@@ -221,7 +221,7 @@ static inline void spill_registers(void)
 		"mov	a0, a12\n\t"
 		"wsr	a13," __stringify(SAR) "\n\t"
 		"wsr	a14," __stringify(PS) "\n\t"
-		:: "a" (&a0), "a" (&ps)
+		: : "a" (&a0), "a" (&ps)
 		: "a2", "a3", "a12", "a13", "a14", "a15", "memory");
 }
 

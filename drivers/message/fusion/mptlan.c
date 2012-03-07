@@ -196,7 +196,7 @@ lan_reply (MPT_ADAPTER *ioc, MPT_FRAME_HDR *mf, MPT_FRAME_HDR *reply)
 		switch (GET_LAN_FORM(tmsg)) {
 
 		// NOTE!  (Optimization) First case here is now caught in
-		//  mptbase.c::mpt_interrupt() routine and callcack here
+		//  mptbase.c: :mpt_interrupt() routine and callcack here
 		//  is now skipped for this case!
 #if 0
 		case LAN_REPLY_FORM_MESSAGE_CONTEXT:

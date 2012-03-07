@@ -311,7 +311,7 @@ static inline int nlmsg_len(const struct nlmsghdr *nlh)
 static inline struct nlattr *nlmsg_attrdata(const struct nlmsghdr *nlh,
 					    int hdrlen)
 {
-	unsigned char *data = nlmsg_data(nlh);
+	unsigned char *data = (unsigned char*)nlmsg_data(nlh);
 	return (struct nlattr *) (data + NLMSG_ALIGN(hdrlen));
 }
 
@@ -730,7 +730,7 @@ static inline struct nlattr *nla_next(const struct nlattr *nla, int *remaining)
  */
 static inline struct nlattr *nla_find_nested(struct nlattr *nla, int attrtype)
 {
-	return nla_find(nla_data(nla), nla_len(nla), attrtype);
+	return nla_find((struct nlattr*)nla_data(nla), nla_len(nla), attrtype);
 }
 
 /**
@@ -746,7 +746,7 @@ static inline int nla_parse_nested(struct nlattr *tb[], int maxtype,
 				   struct nlattr *nla,
 				   const struct nla_policy *policy)
 {
-	return nla_parse(tb, maxtype, nla_data(nla), nla_len(nla), policy);
+	return nla_parse(tb, maxtype, (struct nlattr*)nla_data(nla), nla_len(nla), policy);
 }
 
 /**
@@ -772,7 +772,7 @@ static inline int __nla_parse_nested_compat(struct nlattr *tb[], int maxtype,
 		return -1;
 	if (nla_len(nla) >= NLA_ALIGN(len) + sizeof(struct nlattr))
 		return nla_parse_nested(tb, maxtype,
-					nla_data(nla) + NLA_ALIGN(len),
+					(struct nlattr*)((unsigned char*)nla_data(nla) + NLA_ALIGN(len)),
 					policy);
 	memset(tb, 0, sizeof(struct nlattr *) * (maxtype + 1));
 	return 0;
@@ -1051,7 +1051,7 @@ static inline struct nlattr *nla_nest_compat_start(struct sk_buff *skb,
  */
 static inline int nla_nest_compat_end(struct sk_buff *skb, struct nlattr *start)
 {
-	struct nlattr *nest = (void *)start + NLMSG_ALIGN(start->nla_len);
+	struct nlattr *nest = (struct nlattr*)((unsigned char *)start + NLMSG_ALIGN(start->nla_len));
 
 	start->nla_len = skb_tail_pointer(skb) - (unsigned char *)start;
 	return nla_nest_end(skb, nest);
@@ -1085,7 +1085,7 @@ static inline int nla_nest_cancel(struct sk_buff *skb, struct nlattr *start)
 static inline int nla_validate_nested(struct nlattr *start, int maxtype,
 				      const struct nla_policy *policy)
 {
-	return nla_validate(nla_data(start), nla_len(start), maxtype, policy);
+	return nla_validate((struct nlattr*)nla_data(start), nla_len(start), maxtype, policy);
 }
 
 /**

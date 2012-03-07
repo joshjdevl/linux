@@ -298,5 +298,5 @@ void slb_initialize(void)
 	 * so the stack is in the bolted segment.  By the time it goes
 	 * elsewhere, we'll call _switch() which will bolt in the new
 	 * one. */
-	asm volatile("isync":::"memory");
+	asm volatile("isync": : :"memory");
 }

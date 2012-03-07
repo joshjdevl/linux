@@ -255,7 +255,7 @@ extern int dump_task_extended_fpu (struct task_struct *,
 #define VDSO_HIGH_EHDR		((const struct elfhdr *) VDSO_HIGH_BASE)
 #define VDSO_EHDR		((const struct elfhdr *) VDSO_CURRENT_BASE)
 
-extern void __kernel_vsyscall;
+extern void *__kernel_vsyscall;
 
 #define VDSO_ENTRY		VDSO_SYM(&__kernel_vsyscall)
 

@@ -553,7 +553,7 @@ __xchg_u64_local(volatile long *m, unsigned long val)
 #define __HAVE_ARCH_CMPXCHG 1
 
 static inline unsigned long
-__cmpxchg_u8(volatile char *m, long old, long new)
+__cmpxchg_u8(volatile char *m, long old, long n)
 {
 	unsigned long prev, tmp, cmp, addr64;
 
@@ -575,14 +575,14 @@ __cmpxchg_u8(volatile char *m, long old, long new)
 	".subsection 2\n"
 	"3:	br	1b\n"
 	".previous"
-	: "=&r" (prev), "=&r" (new), "=&r" (tmp), "=&r" (cmp), "=&r" (addr64)
-	: "r" ((long)m), "Ir" (old), "1" (new) : "memory");
+	: "=&r" (prev), "=&r" (n), "=&r" (tmp), "=&r" (cmp), "=&r" (addr64)
+	: "r" ((long)m), "Ir" (old), "1" (n) : "memory");
 
 	return prev;
 }
 
 static inline unsigned long
-__cmpxchg_u16(volatile short *m, long old, long new)
+__cmpxchg_u16(volatile short *m, long old, long n)
 {
 	unsigned long prev, tmp, cmp, addr64;
 
@@ -604,14 +604,14 @@ __cmpxchg_u16(volatile short *m, long old, long new)
 	".subsection 2\n"
 	"3:	br	1b\n"
 	".previous"
-	: "=&r" (prev), "=&r" (new), "=&r" (tmp), "=&r" (cmp), "=&r" (addr64)
-	: "r" ((long)m), "Ir" (old), "1" (new) : "memory");
+	: "=&r" (prev), "=&r" (n), "=&r" (tmp), "=&r" (cmp), "=&r" (addr64)
+	: "r" ((long)m), "Ir" (old), "1" (n) : "memory");
 
 	return prev;
 }
 
 static inline unsigned long
-__cmpxchg_u32(volatile int *m, int old, int new)
+__cmpxchg_u32(volatile int *m, int old, int n)
 {
 	unsigned long prev, cmp;
 
@@ -630,13 +630,13 @@ __cmpxchg_u32(volatile int *m, int old, int new)
 	"3:	br 1b\n"
 	".previous"
 	: "=&r"(prev), "=&r"(cmp), "=m"(*m)
-	: "r"((long) old), "r"(new), "m"(*m) : "memory");
+	: "r"((long) old), "r"(n), "m"(*m) : "memory");
 
 	return prev;
 }
 
 static inline unsigned long
-__cmpxchg_u64(volatile long *m, unsigned long old, unsigned long new)
+__cmpxchg_u64(volatile long *m, unsigned long old, unsigned long n)
 {
 	unsigned long prev, cmp;
 
@@ -655,7 +655,7 @@ __cmpxchg_u64(volatile long *m, unsigned long old, unsigned long new)
 	"3:	br 1b\n"
 	".previous"
 	: "=&r"(prev), "=&r"(cmp), "=m"(*m)
-	: "r"((long) old), "r"(new), "m"(*m) : "memory");
+	: "r"((long) old), "r"(n), "m"(*m) : "memory");
 
 	return prev;
 }
@@ -665,17 +665,17 @@ __cmpxchg_u64(volatile long *m, unsigned long old, unsigned long new)
 extern void __cmpxchg_called_with_bad_pointer(void);
 
 static __always_inline unsigned long
-__cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
+__cmpxchg(volatile void *ptr, unsigned long old, unsigned long n, int size)
 {
 	switch (size) {
 		case 1:
-			return __cmpxchg_u8(ptr, old, new);
+			return __cmpxchg_u8(ptr, old, n);
 		case 2:
-			return __cmpxchg_u16(ptr, old, new);
+			return __cmpxchg_u16(ptr, old, n);
 		case 4:
-			return __cmpxchg_u32(ptr, old, new);
+			return __cmpxchg_u32(ptr, old, n);
 		case 8:
-			return __cmpxchg_u64(ptr, old, new);
+			return __cmpxchg_u64(ptr, old, n);
 	}
 	__cmpxchg_called_with_bad_pointer();
 	return old;
@@ -690,7 +690,7 @@ __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
   })
 
 static inline unsigned long
-__cmpxchg_u8_local(volatile char *m, long old, long new)
+__cmpxchg_u8_local(volatile char *m, long old, long n)
 {
 	unsigned long prev, tmp, cmp, addr64;
 
@@ -709,14 +709,14 @@ __cmpxchg_u8_local(volatile char *m, long old, long new)
 	".subsection 2\n"
 	"3:	br	1b\n"
 	".previous"
-	: "=&r" (prev), "=&r" (new), "=&r" (tmp), "=&r" (cmp), "=&r" (addr64)
-	: "r" ((long)m), "Ir" (old), "1" (new) : "memory");
+	: "=&r" (prev), "=&r" (n), "=&r" (tmp), "=&r" (cmp), "=&r" (addr64)
+	: "r" ((long)m), "Ir" (old), "1" (n) : "memory");
 
 	return prev;
 }
 
 static inline unsigned long
-__cmpxchg_u16_local(volatile short *m, long old, long new)
+__cmpxchg_u16_local(volatile short *m, long old, long n)
 {
 	unsigned long prev, tmp, cmp, addr64;
 
@@ -735,14 +735,14 @@ __cmpxchg_u16_local(volatile short *m, long old, long new)
 	".subsection 2\n"
 	"3:	br	1b\n"
 	".previous"
-	: "=&r" (prev), "=&r" (new), "=&r" (tmp), "=&r" (cmp), "=&r" (addr64)
-	: "r" ((long)m), "Ir" (old), "1" (new) : "memory");
+	: "=&r" (prev), "=&r" (n), "=&r" (tmp), "=&r" (cmp), "=&r" (addr64)
+	: "r" ((long)m), "Ir" (old), "1" (n) : "memory");
 
 	return prev;
 }
 
 static inline unsigned long
-__cmpxchg_u32_local(volatile int *m, int old, int new)
+__cmpxchg_u32_local(volatile int *m, int old, int n)
 {
 	unsigned long prev, cmp;
 
@@ -758,13 +758,13 @@ __cmpxchg_u32_local(volatile int *m, int old, int new)
 	"3:	br 1b\n"
 	".previous"
 	: "=&r"(prev), "=&r"(cmp), "=m"(*m)
-	: "r"((long) old), "r"(new), "m"(*m) : "memory");
+	: "r"((long) old), "r"(n), "m"(*m) : "memory");
 
 	return prev;
 }
 
 static inline unsigned long
-__cmpxchg_u64_local(volatile long *m, unsigned long old, unsigned long new)
+__cmpxchg_u64_local(volatile long *m, unsigned long old, unsigned long n)
 {
 	unsigned long prev, cmp;
 
@@ -780,24 +780,24 @@ __cmpxchg_u64_local(volatile long *m, unsigned long old, unsigned long new)
 	"3:	br 1b\n"
 	".previous"
 	: "=&r"(prev), "=&r"(cmp), "=m"(*m)
-	: "r"((long) old), "r"(new), "m"(*m) : "memory");
+	: "r"((long) old), "r"(n), "m"(*m) : "memory");
 
 	return prev;
 }
 
 static __always_inline unsigned long
-__cmpxchg_local(volatile void *ptr, unsigned long old, unsigned long new,
+__cmpxchg_local(volatile void *ptr, unsigned long old, unsigned long n,
 		int size)
 {
 	switch (size) {
 		case 1:
-			return __cmpxchg_u8_local(ptr, old, new);
+			return __cmpxchg_u8_local(ptr, old, n);
 		case 2:
-			return __cmpxchg_u16_local(ptr, old, new);
+			return __cmpxchg_u16_local(ptr, old, n);
 		case 4:
-			return __cmpxchg_u32_local(ptr, old, new);
+			return __cmpxchg_u32_local(ptr, old, n);
 		case 8:
-			return __cmpxchg_u64_local(ptr, old, new);
+			return __cmpxchg_u64_local(ptr, old, n);
 	}
 	__cmpxchg_called_with_bad_pointer();
 	return old;

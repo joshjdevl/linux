@@ -208,7 +208,7 @@ static inline unsigned long __xchg(unsigned long x, void * ptr, int size)
 extern void __cmpxchg_called_with_bad_pointer(void);
 
 static inline unsigned long
-__cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
+__cmpxchg(volatile void *ptr, unsigned long old, unsigned long n, int size)
 {
 	unsigned long addr, prev, tmp;
 	int shift;
@@ -231,7 +231,7 @@ __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
 			"	jnz	0b\n"
 			"1:"
 			: "=&d" (prev), "=&d" (tmp)
-			: "d" (old << shift), "d" (new << shift), "a" (ptr),
+			: "d" (old << shift), "d" (n << shift), "a" (ptr),
 			  "d" (~(255 << shift))
 			: "memory", "cc");
 		return prev >> shift;
@@ -252,21 +252,21 @@ __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
 			"	jnz	0b\n"
 			"1:"
 			: "=&d" (prev), "=&d" (tmp)
-			: "d" (old << shift), "d" (new << shift), "a" (ptr),
+			: "d" (old << shift), "d" (n << shift), "a" (ptr),
 			  "d" (~(65535 << shift))
 			: "memory", "cc");
 		return prev >> shift;
 	case 4:
 		asm volatile(
 			"	cs	%0,%2,0(%3)\n"
-			: "=&d" (prev) : "0" (old), "d" (new), "a" (ptr)
+			: "=&d" (prev) : "0" (old), "d" (n), "a" (ptr)
 			: "memory", "cc");
 		return prev;
 #ifdef __s390x__
 	case 8:
 		asm volatile(
 			"	csg	%0,%2,0(%3)\n"
-			: "=&d" (prev) : "0" (old), "d" (new), "a" (ptr)
+			: "=&d" (prev) : "0" (old), "d" (n), "a" (ptr)
 			: "memory", "cc");
 		return prev;
 #endif /* __s390x__ */
